@@ -10,7 +10,7 @@ env:
   PROJECT_ID: ${{ secrets.CLOUD_RUN_PROJECT_NAME }}
   REGION: us-west1
   # project-name but it can be anything you want
-  REPO_NAME: craft-app
+  REPO_NAME: inside-app
 
 jobs:
   build-and-deploy:
