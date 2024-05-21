@@ -34,7 +34,7 @@ export default function SideNav() {
         <nav className="w-full md:w-72">
             <div className="w-full flex">
             <div className="flex items-center flex-shrink-0 text-white mr-6 pt-4 pl-3 pr-3 pb-4 md:pb-0 text-2xl">
-                <i className="fa-solid fa-business-time mr-2 text-blue-400 justify-items-start"></i>
+                <i className="fa-solid fa-file-clock mr-2 text-blue-400 justify-items-start"></i>
                 <Link href={"/"} className = "justify-items-start">Inside</Link>
             </div>
             <div className="w-full flex md:hidden justify-end md:justify-normal">
