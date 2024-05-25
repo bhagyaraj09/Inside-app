@@ -6,7 +6,7 @@ export default function TimeReport() {
     <>
       <Title title="Time Reports"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

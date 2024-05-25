@@ -6,7 +6,7 @@ import { Treeview, TreeNodeType } from '@/components/ui/treeview'
 import PoweredBy from '@/components/nav/powered-by';
 import HSpacer from '@/components/ui/h-spacer';
 import MobileLogout from '@/components/nav/mobile-logout';
-import { AboutMenu, DashboardMenu, TimeMenu, EthicsMenu, ContactMenu, AdminMenu } from '@/src/lib/menus';
+import { AboutMenu, DashboardMenu, TimeMenu, LeaveMenu, EthicsMenu, ContactMenu, AdminMenu, HRMenu, HolidayMenu, LeavePolicyMenu } from '@/src/lib/menus';
 import { useSession } from 'next-auth/react';
 
 export default function SideNav() {
@@ -20,13 +20,15 @@ export default function SideNav() {
     }, [ pathname ]);
 
     let data: TreeNodeType[] = [];
-    
-    let menuItems: TreeNodeType[] = [];
 
     data.push(DashboardMenu);
     data.push(TimeMenu);
+    data.push(LeaveMenu);
     if(session?.user.roles.includes('Admin'))
         data.push(AdminMenu);
+    data.push(LeavePolicyMenu);
+    data.push(HolidayMenu);
+    data.push(HRMenu);
     data.push(EthicsMenu);
     data.push(AboutMenu);
     data.push(ContactMenu);
@@ -34,8 +36,11 @@ export default function SideNav() {
         <nav className="w-full md:w-72">
             <div className="w-full flex">
             <div className="flex items-center flex-shrink-0 text-white mr-6 pt-4 pl-3 pr-3 pb-4 md:pb-0 text-2xl">
-                <i className="fa-solid fa-file-clock mr-2 text-blue-400 justify-items-start"></i>
-                <Link href={"/"} className = "justify-items-start">Inside</Link>
+                <i className="fa-regular fa-address-card  mr-2 text-blue-400 justify-items-start"></i>                
+                <Link href={"/"} className = "justify-items-start text-blue-400">
+                    <span className="text-white">Employee </span>
+                    <span className="text-blue-400">Portal</span>
+                </Link>
             </div>
             <div className="w-full flex md:hidden justify-end md:justify-normal">
                 <button

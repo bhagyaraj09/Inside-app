@@ -6,7 +6,7 @@ export default function DailyActivities() {
     <>
       <Title title="Daily Activities"></Title>
       <Container>
-        Ethics is ...
+        Coming soon ...
       </Container>
     </>
   )

@@ -6,7 +6,7 @@ export default function ENCC() {
     <>
       <Title title="Ethics & Code of Conduct"></Title>
       <Container>
-        Ethics is ...
+        Coming soon ...
       </Container>
     </>
   )

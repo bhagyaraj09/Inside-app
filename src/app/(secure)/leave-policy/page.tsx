@@ -1,10 +1,10 @@
 import Title from '@/components/ui/title'
 import Container from '@/components/ui/container'
 
-export default function WorlplaceProfessionalism() {
+export default function Leave() {
   return (
     <>
-      <Title title="Worlplace Professionalism"></Title>
+      <Title title="Leave Policy"></Title>
       <Container>
         Coming soon ...
       </Container>

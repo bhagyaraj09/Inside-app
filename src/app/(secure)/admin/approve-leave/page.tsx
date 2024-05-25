@@ -6,7 +6,7 @@ export default function ApproveLeave() {
     <>
       <Title title="Approve Leave"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

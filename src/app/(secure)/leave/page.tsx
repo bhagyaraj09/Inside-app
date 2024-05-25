@@ -6,7 +6,7 @@ export default function Leave() {
     <>
       <Title title="Leave"></Title>
       <Container>
-        Leave is ...
+        Coming soon ...
       </Container>
     </>
   )

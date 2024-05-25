@@ -7,7 +7,7 @@ import Logout from '@/components/nav/logout';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
-  title: 'Inside by Symphonize',
+  title: 'Symphonize Employee Portal',
   description: 'Symphonize employee portal'
 }
 

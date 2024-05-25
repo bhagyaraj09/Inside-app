@@ -10,81 +10,101 @@ export const TimeMenu: TreeNodeType = {
     name: 'Time',
     url: '/time',
 }
-export const EthicsMenu: TreeNodeType = {
+export const LeaveMenu: TreeNodeType = {
     id: '2',
+    name: 'Leave',
+    url: '/leave',
+}
+export const EthicsMenu: TreeNodeType = {
+    id: '3',
     name: 'Ethics & Code of Conduct',
     url: '',
     children:[
         {
-            id: '21',
+            id: '31',
             name: 'Workplace Professionalism',
             url: '/encc/workplace-professionalism',
         },
         {
-            id: '22',
+            id: '32',
             name: 'Daily Activities',
             url: '/encc/daily-activities',
         },
         {
-            id: '23',
+            id: '33',
             name: 'Use of Company Property',
             url: '/encc/use-of-company-property',
         },
     ]
 }
 export const AboutMenu: TreeNodeType =  {
-
-    id: '3',
+    id: '4',
     name: 'About',
     url: '',
     children:[
         {
-            id: '31',
+            id: '41',
             name: 'Company',
             url: '/about/company',
         },
         {
-            id: '32',
+            id: '42',
             name: 'Mission',
             url: '/about/mission',
         },
         {
-            id: '33',
+            id: '43',
             name: 'Vision',
             url: '/about/vision',
         },
     ]
 }
 export const ContactMenu: TreeNodeType = {
-    id: '4',
+    id: '5',
     name: 'Contact',
     url: '/contact',
 }
 export const AdminMenu: TreeNodeType =  {
-
-    id: '5',
+    id: '6',
     name: 'Admin',
     url: '',
     children:[        
         {
-            id: '51',
+            id: '61',
             name: 'Approve Time',
             url: '/admin/approve-time',
         },
         {
-            id: '52',
+            id: '62',
             name: 'Approve Leave',
             url: '/admin/approve-leave',
         },
         {
-            id: '53',
+            id: '63',
             name: 'Time Reports',
             url: '/admin/time-report',
         },
         {
-            id: '54',
+            id: '64',
             name: 'Leave Reports',
             url: '/admin/leave-report',
         },
     ]
+}
+export const HolidayMenu: TreeNodeType = {
+    id: '7',
+    name: 'Holiday Schedule',
+    url: '/holiday-schedule',
+}
+
+export const HRMenu: TreeNodeType = {
+    id: '8',
+    name: 'Human Resources',
+    url: '/human-resources',
+}
+
+export const LeavePolicyMenu: TreeNodeType = {
+    id: '9',
+    name: 'Leave Policy',
+    url: '/leave-policy',
 }

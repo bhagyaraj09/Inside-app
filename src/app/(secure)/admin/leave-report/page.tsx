@@ -6,7 +6,7 @@ export default function LeaveReport() {
     <>
       <Title title="Leave Reports"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

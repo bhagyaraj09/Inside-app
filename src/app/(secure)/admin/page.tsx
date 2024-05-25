@@ -6,7 +6,7 @@ export default function Admin() {
     <>
       <Title title="Admin"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

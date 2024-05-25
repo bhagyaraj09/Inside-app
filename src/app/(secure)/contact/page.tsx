@@ -6,7 +6,7 @@ export default function Contact() {
     <>
       <Title title="Contact"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

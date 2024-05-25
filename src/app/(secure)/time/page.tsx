@@ -1,10 +1,23 @@
-import Title from '@/components/ui/title'
-import Container from '@/components/ui/container'
 import { CalendarDateRangePicker } from "@/components/time/date-range-picker"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Textarea } from "@/components/ui/textarea"
+import { Card, CardContent,} from "@/components/ui/card"
+import { SOWResource, Service, Timesheet } from '@/types';
+import { getServerSession } from "next-auth";
+import { getProjectsByResource } from '@/src/actions/sowResource'
+import { getServicesData } from '@/src/actions/service';
+import { fetchResource } from '@/src/actions/resource'
+import { fetchTime } from '@/src/actions/timeSheet'
+import { authOptions } from '@/utils/auth'
+
+import Title from '@/components/ui/title'
+import Container from '@/components/ui/container'
+import ServicesSelect from '@/src/components/time/services-select';
+import ProjectsSelect from '@/src/components/time/projects-select'
+import TimeForm from '@/src/components/time/time-form'
+
 import {
   Select,
   SelectContent,
@@ -12,15 +25,25 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 
-export default function Time() {
+export default async function Time() {
+  const session = await getServerSession(authOptions);
+  const resource = await fetchResource(session?.user.email as string);  
+  const services: Service[] = await getServicesData();
+  const projects: SOWResource[] = await getProjectsByResource(session?.user.email as string);
+  //const timeshets: Timesheet[] = await fetchTime(resource.id, new Date(), new Date()); 
+  var newTimesheet: Timesheet = {
+    id: '',
+    date: new Date(),
+    sowId: '',
+    resourceId: '',
+    serviceId: '',
+    hours: undefined,
+    description: '',
+    billable: false,
+    status: ''
+  }
+    
   return (
     <>
       <Title title="Time"></Title>
@@ -40,76 +63,7 @@ export default function Time() {
               </Button>
             </div>
           </div>
-          <div className="mt-5">
-            <Card>
-              <CardContent>
-                <h2 className="text-lg font-medium py-3">Record your time<i className="ml-2 fa-regular fa-clock text-sm"></i></h2>
-                <div className='flex'>
-                  <span className='mr-2 w-48'>
-                    <div>Date</div>
-                    <Select defaultValue='13'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a date" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="13">Mon, May 13th, 2024</SelectItem>
-                        <SelectItem value="14">Tue, May 14th, 2024</SelectItem>
-                        <SelectItem value="15">Wed, May 15th, 2024</SelectItem>
-                        <SelectItem value="16">Thu, May 16th, 2024</SelectItem>
-                        <SelectItem value="17">Fri, May 17th, 2024</SelectItem>
-                        <SelectItem value="18">Sat, May 18th, 2024</SelectItem>
-                        <SelectItem value="19">Sun, May 19th, 2024</SelectItem>                      
-                      </SelectContent>
-                    </Select>
-                  </span>
-                  <span className='mr-2 w-72'>
-                    <div>Project</div>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </span>
-                  <span className='mr-2 w-72'>
-                    <div>Service</div>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </span>
-                  <span className='mr-2 w-24'>
-                    <div>Hours</div>
-                    <Input type="text" placeholder="Hours" />
-                  </span>
-                  <span className='mr-2 w-72'>
-                    <div>Description</div>
-                    <Textarea placeholder="Type your description here." className='h-9'/>
-                  </span>
-                  <span className='mr-2 w-20 grid items-center justify-center'>
-                    <div>Billable</div>
-                    <div className='flex items-center justify-center'>
-                      <Checkbox>Billable</Checkbox>
-                    </div>
-                  </span>
-                  <span>
-                    <div>&nbsp;</div>
-                    <Button variant="outline"><i className='mr-2 fa-regular fa-square-plus'></i>Add Time</Button>
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <TimeForm projects={projects} services={services} timeheet={newTimesheet} formType='Add' />
           <div className="mt-5">
             <Card>
               <CardContent>                
@@ -120,9 +74,8 @@ export default function Time() {
                   <span className='mr-2 w-72'>Service</span>
                   <span className='mr-2 w-20'>Hours</span>
                   <span className='mr-2 w-72'>Description</span>
-                  <span className='mr-2 w-24 flex justify-center'>Billable</span>
+                  <span className='mr-2 w-20 flex justify-center'>Billable</span>
                   <span className='mr-2'></span>
-
                 </div>
                 <div className='flex mb-1'>
                   <span className='mr-2 w-48'>
@@ -142,30 +95,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -199,30 +134,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -256,30 +173,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -313,30 +212,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -370,30 +251,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -427,30 +290,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -484,30 +329,12 @@ export default function Time() {
                     </Select>
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a project" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">SOW#1 CSB</SelectItem>
-                        <SelectItem value="dark">SOW#3 CFCU</SelectItem>
-                        <SelectItem value="system">SOW#2 SaveOn</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ProjectsSelect projects={projects} id='' />
                   </span>
                   <span className='mr-2 w-72'>
-                    <Select defaultValue='light'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a service" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">UX/UI</SelectItem>
-                        <SelectItem value="dark">Engineering</SelectItem>
-                        <SelectItem value="system">Support & Maintenance</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <ServicesSelect services={services} id='' />
                   </span>
-                  <span className='mr-2 w-24'>
+                  <span className='mr-2 w-20'>
                     <Input type="text" placeholder="Hours" />
                   </span>
                   <span className='mr-2 w-72'>
@@ -524,7 +351,7 @@ export default function Time() {
                   </span>
                 </div>                
                 <div className="mt-5">
-                  <Button variant="outline"><span className='text-green-800 font-semibold'><i className="mr-2 fa-solid fa-list-check"></i>Submit for Aproval</span></Button>
+                  <Button variant="outline"><span className='text-green-800 font-semibold'><i className="mr-2 fa-solid fa-list-check"></i>Submit for Approval</span></Button>
                 </div>
               </CardContent>
             </Card>

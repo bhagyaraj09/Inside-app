@@ -6,7 +6,7 @@ export default function ApproveTime() {
     <>
       <Title title="Approve Time"></Title>
       <Container>
-        Admin is ...
+        Coming soon ...
       </Container>
     </>
   )

@@ -6,7 +6,7 @@ export default function UseOfCompanyProperty() {
     <>
       <Title title="Use of Company Property"></Title>
       <Container>
-        Ethics is ...
+        Coming soon ...
       </Container>
     </>
   )

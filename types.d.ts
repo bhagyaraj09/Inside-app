@@ -97,6 +97,7 @@ export type Company = {
     export type  SOWResource = {
       id:             string    
       sowId?:         string
+      statementOfWork?: StatementOfWork
       resourceId?:    string
       resource?:      Resource
       projectRoleId?: string
@@ -112,5 +113,23 @@ export type Company = {
       active:      boolean
       createdAt?:  Date
     }
+
+    export type Timesheet = {
+      id:             string
+      date:           Date
+      sowId:          string
+      statementOfWork?: StatementOfWork      
+      resourceId:     string
+      resource?:      Resource
+      serviceId:      string
+      service?:       Service
+      hours:          float
+      description:    string
+      billable:       boolean
+      status:         string
+      approvedBy?:    string | null
+      approvedDate?:  Date  | null
+      createdAt?:     Date
+  }   
     
   export type FormType = "Add" | "Edit";

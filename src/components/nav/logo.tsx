@@ -8,7 +8,7 @@ export default function Logo() {
     <>
       <div className="flex items-center flex-shrink-0 text-white mr-6 pt-4 pl-3 pr-3 pb-4 sm:pb-0 text-2xl">
         <i className="fa-solid fa-chart-simple mr-2 text-green-500 justify-items-start"></i>
-        <Link href={"/"} className = "justify-items-start">Inside</Link>
+        <Link href={"/"} className = "justify-items-start">Employee Portal</Link>
       </div>
       <div className="w-full flex sm:hidden justify-end sm:justify-normal">
         <button
