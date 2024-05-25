@@ -12,9 +12,9 @@ interface ProjectsSelectProps {
     projects: SOWResource[],
 }
 
-export default async function ProjectsSelect(props: ProjectsSelectProps) {  
+export default function ProjectsSelect(props: ProjectsSelectProps) {  
   return (
-    <Select defaultValue={props.id == "" ? props.projects[0].id.toString() : props.id }>
+    <Select defaultValue={props.id ? props.projects[0].id.toString() : props.id }>
         <SelectTrigger>
         <SelectValue placeholder="Select a service" />
         </SelectTrigger>

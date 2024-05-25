@@ -28,7 +28,7 @@ export default function DatesSelect(props: DatesSelectProps) {
       </SelectTrigger>
       <SelectContent>
         {datesArray.map((date, index) => (
-          <SelectItem key = {format(date, 'yyyy-MM-dd')} value={format(date, 'yyyy-MM-dd')}>{formatWithOrdinal(date)}</SelectItem>
+          <SelectItem key = {format(date, 'yyyy-MM-dd')} value={format(date, 'yyyy-MM-dd')}>{format(date, 'MM/dd/yyyy')}</SelectItem>
         ))}
       </SelectContent>
     </Select>
