@@ -14,13 +14,13 @@ interface ProjectsSelectProps {
 
 export default function ProjectsSelect(props: ProjectsSelectProps) {  
   return (
-    <Select defaultValue={props.id ? props.projects[0].id.toString() : props.id }>
+    <Select defaultValue={props.id}>
         <SelectTrigger>
         <SelectValue placeholder="Select a service" />
         </SelectTrigger>
         <SelectContent>
         {props.projects.map((project) => (
-            <SelectItem key={project.id} value={project.id}>
+            <SelectItem key={project.sowId} value={project.sowId??""}>
             {project.statementOfWork?.project?.name + " - " + project.statementOfWork?.name}
             </SelectItem>
         ))}

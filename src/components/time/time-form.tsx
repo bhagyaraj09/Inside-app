@@ -15,6 +15,8 @@ interface TimeFormProps {
     services: Service[];
     timeheet: Timesheet;
     formType: FormType;
+    defaultProject: string;
+    defaultService: string
 }
 
 export default function TimeForm(props: TimeFormProps) {
@@ -30,10 +32,10 @@ export default function TimeForm(props: TimeFormProps) {
                 <DatesSelect startDate={new Date()} selectedDate='2024-05-23' />
             </span>
             <span className='mr-1 w-full md:w-56'>
-                <ProjectsSelect projects={props.projects} id='' />
+                <ProjectsSelect projects={props.projects} id={props.defaultProject} />
             </span>
             <span className='mr-1 w-full md:w-40'>
-                <ServicesSelect services={props.services} id='' />
+                <ServicesSelect services={props.services} id={props.defaultService} />
             </span>
             <span className='mr-1 w-full md:w-16'>
                 <Input type="text" placeholder="hrs" />

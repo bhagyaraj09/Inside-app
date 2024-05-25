@@ -14,7 +14,7 @@ interface ServicesSelectProps {
 
 export default function ServicesSelect(props: ServicesSelectProps) {  
   return (
-    <Select defaultValue={props.id ? props.services[0].id.toString() : props.id }>
+    <Select defaultValue={props.id}>
         <SelectTrigger>
         <SelectValue placeholder="Select a service" />
         </SelectTrigger>

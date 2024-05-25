@@ -107,7 +107,7 @@ export default function Time() {
                   <span className='mr-1 w-20 flex justify-center'>Billable</span>
                   <span className='mr-1'></span>
                 </div>
-                <TimeForm projects={projects} services={services} timeheet={newTimesheet} formType='Add' />
+                <TimeForm projects={projects} services={services} timeheet={newTimesheet} formType='Add' defaultProject="" defaultService=""/>
               </CardContent>
             </Card>
           </div>
@@ -126,7 +126,7 @@ export default function Time() {
                       <span className='mr-1 w-20 flex justify-center'>Billable</span>
                       <span className='mr-1'></span>
                     </div>
-                    <TimeForm key={i} projects={projects} services={services} timeheet={newTimesheet} formType='Edit' />
+                    <TimeForm key={i} projects={projects} services={services} timeheet={newTimesheet} formType='Edit' defaultProject="" defaultService="" />
                     
                   </div>
                 )}
