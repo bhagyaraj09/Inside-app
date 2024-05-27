@@ -1,30 +1,16 @@
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-  } from "@/components/ui/select"
 import { SOWResource } from '@/types';
-
 interface ProjectsSelectProps {
     id: string,
     projects: SOWResource[],
+    disabled: boolean,
 }
 
-export default function ProjectsSelect(props: ProjectsSelectProps) {  
+export default function ProjectsSelect(props: ProjectsSelectProps) {    
   return (
-    <Select defaultValue={props.id}>
-        <SelectTrigger>
-        <SelectValue placeholder="Select a service" />
-        </SelectTrigger>
-        <SelectContent>
-        {props.projects.map((project) => (
-            <SelectItem key={project.sowId} value={project.sowId??""}>
-            {project.statementOfWork?.project?.name + " - " + project.statementOfWork?.name}
-            </SelectItem>
+    <select id="sowId" name="sowId" defaultValue={props.id} className="p-1.5 border rounded-md w-full"  disabled={props.disabled}>
+        {props.projects.map( project => (
+            <option key={project.id} value={project.sowId}>{project.statementOfWork?.project?.name + " - " + project.statementOfWork?.name}</option>
         ))}
-        </SelectContent>
-    </Select>
+    </select>
   );
 };

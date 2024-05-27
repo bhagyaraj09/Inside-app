@@ -1,47 +1,31 @@
 "use client"
-
 import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { addDays, format } from "date-fns"
-import { DateRange } from "react-day-picker"
-
+import { format } from "date-fns"
 import { cn } from "@/src/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
 
-export function WeekSelector({
+interface WeekSelectorProps {
+  startDate: string;
+}
+
+export function WeekSelector(props: WeekSelectorProps, {
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-
-    var curr = new Date; // get current date
-    var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
-    
+    var curr = new Date(props.startDate); // get current date
+    var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week    
     var firstday = new Date(curr.setDate(first));
-    var lastday = new Date(curr.setDate(last));
-
-
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: firstday,
-    to: lastday,
-  })
-
+    var lastday = new Date(curr.setDate(first + 6));
   return (
-    <div className={cn("border h-9 items-center justify-center rounded-md flex px-2", className)}>      
+    <div className={cn("border h-9 items-center justify-center rounded-md flex px-2 w-64", className)}>      
       <CalendarIcon className="mr-2 h-4 w-4" />
-      {date?.from ? (
-        date.to ? (
+      {firstday ? (
+        lastday ? (
           <>
-            {format(date.from, "LLL dd, y")} -{" "}
-            {format(date.to, "LLL dd, y")}
+            {format(firstday, "LLL dd, y")} -{" "}
+            {format(lastday, "LLL dd, y")}
           </>
         ) : (
-          format(date.from, "LLL dd, y")
+          format(firstday, "LLL dd, y")
         )
       ) : (
         <span>Pick a date</span>

@@ -4,6 +4,8 @@ import prisma from "../app/utils/db";
 import { Timesheet } from '@/types';
 
 export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(23,59,59,999);
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -26,7 +28,8 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
         }
         },
     });
-    return data;
+    return JSON.parse(JSON.stringify(data));
+    //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
 
 export async function updateTime(formData: FormData){
