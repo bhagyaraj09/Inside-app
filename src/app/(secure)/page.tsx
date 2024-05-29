@@ -14,6 +14,28 @@ export const metadata: Metadata = {
 }
 
 export default function DashboardPage() {
+  const nextPayday = () : string => {    
+      // Parse the start date
+      let start = new Date('5/24/2024');
+      let today = new Date();
+  
+      // Calculate the difference in days
+      let diff = Math.ceil((today.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+
+      // Calculate the number of biweekly periods since the start date
+      let periods = Math.floor(diff / 14);
+
+      // Calculate the next payday
+      let nextPayday = new Date(start);
+      nextPayday.setDate(start.getDate() + (periods + 1) * 14);
+
+      // If the next payday is today or in the past, calculate the next payday
+      if (nextPayday <= today) {
+          nextPayday.setDate(nextPayday.getDate() + 14);
+      }
+
+    return nextPayday.toDateString();
+  }
   return (
     <>
       <Title title="Dashboard"></Title>
@@ -38,7 +60,7 @@ export default function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Fri, Jun 7th, 2024</div>
+              <div className="text-2xl font-bold">{nextPayday()}</div>
               <p className="text-xs text-muted-foreground">
                 Bi-Weekly
               </p>

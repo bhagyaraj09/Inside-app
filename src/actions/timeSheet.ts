@@ -114,7 +114,19 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
                 gte: startDate,
                 lte: endDate
             },
-            resourceId: resourceId
+            resourceId: resourceId,
+            OR: [
+                {
+                    status: {
+                        not: "Submitted"
+                    }
+                },
+                {
+                    status: {
+                        not: "Approved"
+                    }
+                }
+            ]
         }
     });    
     return fetchTime(resourceId, startDate, endDate);

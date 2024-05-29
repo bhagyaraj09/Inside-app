@@ -1,5 +1,5 @@
 import { withAuth } from "next-auth/middleware"
-import { EngagementManagerRoutes, ExecutiveRoutes, ProjectManagerRoutes } from "@/src/lib/routes";
+import { EmployeeRoutes, EngagementManagerRoutes, ExecutiveRoutes, ProjectManagerRoutes } from "@/src/lib/routes";
 
 export default withAuth(
   function middleware(req) {},
@@ -12,14 +12,14 @@ export default withAuth(
           }
           if(token?.roles.includes('Executive')){            
             return ExecutiveRoutes.findIndex((route) => { return req.nextUrl.pathname.startsWith(route);}) != -1;
+          }          
+          if(token?.roles.includes('EngagementManager')){            
+            return EngagementManagerRoutes.findIndex((route) => { return req.nextUrl.pathname.startsWith(route);}) != -1;
           }
           if(token?.roles.includes('ProjectManager')){            
             return ProjectManagerRoutes.findIndex((route) => { return req.nextUrl.pathname.startsWith(route);}) != -1;
           }
-          if(token?.roles.includes('EngagementManager')){            
-            return EngagementManagerRoutes.findIndex((route) => { return req.nextUrl.pathname.startsWith(route);}) != -1;
-          }
-          return false;
+          return EmployeeRoutes.findIndex((route) => { return req.nextUrl.pathname.startsWith(route);}) != -1;
         }
         else{
           return false;

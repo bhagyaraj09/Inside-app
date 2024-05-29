@@ -99,15 +99,23 @@ export default function TimeForm(props: TimeFormProps) {
                     <Checkbox checked={billable} onCheckedChange={setTimeBillable} name="billable" id="billable">Billable</Checkbox>                    
                 </div>
             </span>
-            {props.formType == "Edit" ?
-                <span className="w-full md:w-24">
-                    <span className="mr-1">
-                        <Button variant='outline'  disabled={disabled} value="delete" name="action"><i className="fa-regular fa-trash-can text-red-700"></i></Button>
+            {props.formType == "Edit" ?                
+                props.timesheet?.status == "Added" ?
+                    <span className="w-full md:w-24">
+                        <span className="mr-1">
+                            <Button variant='outline'  disabled={disabled} value="delete" name="action"><i className="fa-regular fa-trash-can text-red-700"></i></Button>
+                        </span>
+                        <span>
+                            <Button variant='outline'  disabled={disabled} value="update" name="action"><i className="fa-regular fa-floppy-disk"></i></Button>
+                        </span>
                     </span>
-                    <span>
-                        <Button variant='outline'  disabled={disabled} value="update" name="action"><i className="fa-regular fa-floppy-disk"></i></Button>
+                :
+                    <span className="w-full md:w-24 md:grid md:items-center md:justify-center">
+                        <span className="mr-1 font-semibold text-blue-800">
+                            {props.timesheet?.status}
+                        </span>
                     </span>
-                </span>            :
+            :
                 <span className="mr-1 w-full md:w-20">
                     <Button variant="outline"><i className='mr-2 fa-regular fa-square-plus'></i>Add Time</Button>
                 </span>
