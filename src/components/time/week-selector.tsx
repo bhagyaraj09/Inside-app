@@ -1,7 +1,6 @@
 "use client"
 import * as React from "react"
 import { CalendarIcon } from "@radix-ui/react-icons"
-import { format } from "date-fns"
 import { cn } from "@/src/lib/utils"
 
 interface WeekSelectorProps {
@@ -16,20 +15,10 @@ export function WeekSelector(props: WeekSelectorProps, {
     var firstday = new Date(curr.setDate(first));
     var lastday = new Date(curr.setDate(first + 6));
   return (
-    <div className={cn("border h-9 items-center justify-center rounded-md flex px-2 w-64", className)}>      
+    <div className={cn("border h-9 items-center justify-center rounded-md flex px-2 w-80", className)}>      
       <CalendarIcon className="mr-2 h-4 w-4" />
-      {firstday ? (
-        lastday ? (
-          <>
-            {format(firstday, "LLL dd, y")} -{" "}
-            {format(lastday, "LLL dd, y")}
-          </>
-        ) : (
-          format(firstday, "LLL dd, y")
-        )
-      ) : (
-        <span>Pick a date</span>
-      )}  
+      {firstday.toDateString()} -{" "}
+      {lastday.toDateString()}
     </div>
   )
 }

@@ -8,7 +8,7 @@ import { getProjectsByResource } from '@/src/actions/sowResource'
 import { getServicesData } from '@/src/actions/service';
 import { fetchResource } from '@/src/actions/resource'
 import { fetchTime } from '@/src/actions/timeSheet'
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Title from '@/components/ui/title'
 import Container from '@/components/ui/container'
@@ -73,7 +73,7 @@ export default function Time() {
   }
   getTimesheets();
   }, [resource?.id, startDate]);
-  var newTimesheet: Timesheet = { id: '', date: new Date(), sowId: '', resourceId: '', serviceId: '', hours: undefined, description: '', billable: false, status: 'Added' }   
+  var newTimesheet: Timesheet = { id: '', email:session?.user.email?? "",  date: new Date(), sowId: '', resourceId: resource?.id?? "", serviceId: '', hours: undefined, description: '', billable: true, status: 'Added' }   
   const handleNextWeek = () => {
     setStartDate(new Date(startDate.setDate(startDate.getDate() + 7)));
   }
@@ -112,7 +112,8 @@ export default function Time() {
                   <span className='mr-1 w-20 flex justify-center'>Billable</span>
                   <span className='mr-1'></span>
                 </div>
-                <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' defaultProject={selectedProject} defaultService={selectedService} startDate={startDate} />
+                <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' 
+                  defaultProject={selectedProject} defaultService={selectedService} startDate={startDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} />
               </CardContent>
             </Card>
           </div>
@@ -132,7 +133,8 @@ export default function Time() {
                         <span className='mr-1 w-20 flex justify-center'>Billable</span>
                         <span className='mr-1'></span>
                       </div>
-                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} startDate={startDate} />
+                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} startDate={startDate} 
+                      setTimesheets={setTimesheets} resourceId={resource?.id ?? ""}/>
                     </div>
                   )}
                   <div className="mt-5">

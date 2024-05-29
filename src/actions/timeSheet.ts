@@ -5,7 +5,7 @@ import { Timesheet } from '@/types';
 
 export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     startDate.setHours(0,0,0,0);
-    endDate.setHours(23,59,59,999);
+    endDate.setHours(0,0,0,0);    
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -33,31 +33,24 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
 }
 
 export async function updateTime(formData: FormData){
-    "use server";    
+    "use server";       
     const data = await prisma.timesheet.update({
         data: {
-            date: formData.get("name") as string,
+            date: new Date(formData.get("date") as string),
             email: formData.get("email") as string,
             statementOfWork: {
                 connect: {
                     id: formData.get("sowId") as string,
                 }
-            },
-            resource: {
-                connect: {
-                    id: formData.get("resourceId") as string,
-                }
-            },
+            },            
             service: {
                 connect: {
                     id: formData.get("serviceId") as string,
                 }
             },
-            hours: formData.get("federalTaxId") as string,
-            description: formData.get("address1") as string,
+            hours: formData.get("hours") as string,
+            description: formData.get("description") as string,
             billable: Boolean(formData.get("billable")),
-            createdAt: formData.get("city") as string,
-            
         },
         where: {
             id: formData.get("id") as string
@@ -67,10 +60,10 @@ export async function updateTime(formData: FormData){
 }
 
 export async function addTime(formData: FormData){
-    "use server";    
+    "use server";   
     const data = await prisma.timesheet.create ({
         data: {
-            date: formData.get("date") as string,
+            date: new Date(formData.get("date") as string),
             email: formData.get("email") as string,
             statementOfWork: {
                 connect: {
@@ -87,12 +80,21 @@ export async function addTime(formData: FormData){
                     id: formData.get("serviceId") as string,
                 }
             },
-            hours: formData.get("hours") as string,
+            hours: parseFloat(formData.get("hours") as string),
             description: formData.get("description") as string,
             billable: Boolean(formData.get("billable")),
-            status:  formData.get("status") as string,
-            createdAt: formData.get("city") as string,
+            status:  "Added",
         }
     });
-    revalidatePath("/admin/customers");    
+    revalidatePath("/time");
+}
+
+export async function deleteTime(id: string){
+    "use server";   
+    const data = await prisma.timesheet.delete({
+        where: {
+            id: id
+        }
+    });
+    revalidatePath("/time");
 }

@@ -116,6 +116,7 @@ export type Company = {
 
     export type Timesheet = {
       id:             string
+      email:          string
       date:           Date
       sowId:          string
       statementOfWork?: StatementOfWork      

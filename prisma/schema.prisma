@@ -188,7 +188,7 @@ model ResourceStatus {
 
 model Timesheet {
   id              String @id @default(cuid())
-  date            DateTime  
+  date            DateTime
   email           String @db.VarChar(200)  
   sowId           String @db.VarChar(30)
   statementOfWork StatementOfWork @relation("Timesheets", fields: [sowId], references: [id])
