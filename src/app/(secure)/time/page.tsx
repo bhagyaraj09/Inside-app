@@ -7,7 +7,7 @@ import { SOWResource, Service, Timesheet, Resource } from '@/types';
 import { getProjectsByResource } from '@/src/actions/sowResource'
 import { getServicesData } from '@/src/actions/service';
 import { fetchResource } from '@/src/actions/resource'
-import { fetchTime } from '@/src/actions/timeSheet'
+import { fetchTime, submitTimeForApproval } from '@/src/actions/timeSheet'
 import { SetStateAction, useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Title from '@/components/ui/title'
@@ -22,7 +22,15 @@ export default function Time() {
   const [selectedService, setSelectedService] = useState("");
   const [selectedProject, setSelectedProject] = useState("");
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
-  const [startDate, setStartDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const handleSubmitforApproval = async() => {
+    if(resource?.id){
+      const curr = new Date(currentDate.toString()); // get current date
+      const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week      
+      const response =  await submitTimeForApproval(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + 6)));
+      setTimesheets(response);
+    }  
+  }
   useEffect(() => {    
     const getServices = async() => {
       try{        
@@ -62,7 +70,7 @@ export default function Time() {
   const getTimesheets = async() => {
     try{
       if(resource?.id){
-        const curr = new Date(startDate.toString()); // get current date
+        const curr = new Date(currentDate.toString()); // get current date
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
         const response =  await fetchTime(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + 6))); // last day is the first day + 6
         setTimesheets(response);        
@@ -72,13 +80,13 @@ export default function Time() {
     }  
   }
   getTimesheets();
-  }, [resource?.id, startDate]);
+  }, [resource?.id, currentDate]);
   var newTimesheet: Timesheet = { id: '', email:session?.user.email?? "",  date: new Date(), sowId: '', resourceId: resource?.id?? "", serviceId: '', hours: undefined, description: '', billable: true, status: 'Added' }   
   const handleNextWeek = () => {
-    setStartDate(new Date(startDate.setDate(startDate.getDate() + 7)));
+    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 7)));
   }
   const handlePrevWeek = () => {
-    setStartDate(new Date(startDate.setDate(startDate.getDate() - 7)));
+    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 7)));
   }
   return (
     <>
@@ -90,7 +98,7 @@ export default function Time() {
               <Button variant="outline" size="icon" onClick={handlePrevWeek}>
                 <i className="fa-solid fa-arrow-left"></i>
               </Button>
-              <WeekSelector startDate={startDate.toString()} />
+              <WeekSelector currentDate={currentDate.toString()} />
               <Button variant="outline" size="icon" onClick={handleNextWeek}>
                 <i className="fa-solid fa-arrow-right"></i>
               </Button>
@@ -113,7 +121,7 @@ export default function Time() {
                   <span className='mr-1'></span>
                 </div>
                 <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' 
-                  defaultProject={selectedProject} defaultService={selectedService} startDate={startDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} />
+                  defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} />
               </CardContent>
             </Card>
           </div>
@@ -133,12 +141,12 @@ export default function Time() {
                         <span className='mr-1 w-20 flex justify-center'>Billable</span>
                         <span className='mr-1'></span>
                       </div>
-                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} startDate={startDate} 
+                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} currentDate={currentDate} 
                       setTimesheets={setTimesheets} resourceId={resource?.id ?? ""}/>
                     </div>
                   )}
                   <div className="mt-5">
-                      <Button variant="outline"><span className='text-green-800 font-semibold'><i className="mr-2 fa-solid fa-list-check"></i>Submit for Approval</span></Button>
+                      <Button variant="outline" onClick={handleSubmitforApproval}><span className='text-green-800 font-semibold'><i className="mr-2 fa-solid fa-list-check"></i>Submit for Approval</span></Button>
                   </div>                
                 </CardContent>
               </Card>

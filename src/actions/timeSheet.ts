@@ -4,6 +4,7 @@ import prisma from "../app/utils/db";
 import { Timesheet } from '@/types';
 
 export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";
     startDate.setHours(0,0,0,0);
     endDate.setHours(0,0,0,0);    
     const data = await prisma.timesheet.findMany ({
@@ -21,11 +22,11 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
             createdAt: true,        
         },    
         where: {
-        resourceId: resourceId,
-        date: {
-            gte: startDate,
-            lte: endDate
-        }
+            resourceId: resourceId,
+            date: {
+                gte: startDate,
+                lte: endDate
+            }
         },
     });
     return JSON.parse(JSON.stringify(data));
@@ -97,4 +98,24 @@ export async function deleteTime(id: string){
         }
     });
     revalidatePath("/time");
+}
+
+export async function submitTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";
+    console.log(resourceId, startDate, endDate);
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);        
+    const data = await prisma.timesheet.updateMany({
+        data: {
+            status: "Submitted"
+        },
+        where: {
+            date: {
+                gte: startDate,
+                lte: endDate
+            },
+            resourceId: resourceId
+        }
+    });    
+    return fetchTime(resourceId, startDate, endDate);
 }

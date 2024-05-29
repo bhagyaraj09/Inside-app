@@ -1,13 +1,13 @@
 import { format, addDays } from "date-fns";
 interface DatesSelectProps {
-  startDate: Date,
+  currentDate: Date,
   selectedDate: string
   disabled: boolean
 }
 
 export default function DatesSelect(props: DatesSelectProps) {  
-  var first = props.startDate.getDate() - props.startDate.getDay() + 1; // First day is the day of the month - the day of the week  
-  const datesArray = Array.from({ length: 7 }, (_, i) => addDays(new Date(props.startDate.setDate(first)), i));
+  var first = props.currentDate.getDate() - props.currentDate.getDay() + 1; // First day is the day of the month - the day of the week  
+  const datesArray = Array.from({ length: 7 }, (_, i) => addDays(new Date(props.currentDate.setDate(first)), i));
   const formatWithOrdinal = (date: Date) => {
     const day = date.getDate();
     const suffix = ['th', 'st', 'nd', 'rd'];

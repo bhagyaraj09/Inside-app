@@ -38,7 +38,7 @@ export default function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Fri, May 24th, 2024</div>
+              <div className="text-2xl font-bold">Fri, Jun 7th, 2024</div>
               <p className="text-xs text-muted-foreground">
                 Bi-Weekly
               </p>
@@ -64,7 +64,7 @@ export default function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">23.50</div>
+              <div className="text-2xl font-bold">Coming soon..</div>
               <p className="text-xs text-muted-foreground">
                 Days
               </p>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">12.0</div>
+              <div className="text-2xl font-bold">Coming soon..</div>
               <p className="text-xs text-muted-foreground">
                 Days
               </p>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
               </svg>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">Ashok Cherukuri</div>
+              <div className="text-2xl font-bold">Coming soon..</div>
               <p className="text-xs text-muted-foreground">
                 <i className="fa-solid fa-at mr-1"></i>ashok@symphonize.com
               </p>

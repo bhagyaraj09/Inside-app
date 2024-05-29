@@ -4,13 +4,13 @@ import { CalendarIcon } from "@radix-ui/react-icons"
 import { cn } from "@/src/lib/utils"
 
 interface WeekSelectorProps {
-  startDate: string;
+  currentDate: string;
 }
 
 export function WeekSelector(props: WeekSelectorProps, {
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-    var curr = new Date(props.startDate); // get current date
+    var curr = new Date(props.currentDate); // get current date
     var first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week    
     var firstday = new Date(curr.setDate(first));
     var lastday = new Date(curr.setDate(first + 6));
