@@ -21,6 +21,7 @@ interface TimeFormProps {
     resourceId: string;
     dateMode: string;
     setTimesheets: React.Dispatch<React.SetStateAction<Timesheet[]>>;
+    setTotalHours: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export default function TimeForm(props: TimeFormProps) {
@@ -37,6 +38,7 @@ export default function TimeForm(props: TimeFormProps) {
             const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
             const response =  await fetchTime(props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
             props.setTimesheets(response);
+            props.setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));     
         } catch(error) {
           console.log(error);
         }  
@@ -68,7 +70,8 @@ export default function TimeForm(props: TimeFormProps) {
                 else if(action == "update"){
                     validateNumber(formData.get("hours") as string, setError);
                     if(validateNumber(formData.get("hours") as string, setError) == "") {
-                        await updateTime(formData) 
+                        await updateTime(formData);
+                        getTimesheets();
                     }
                 }
             }

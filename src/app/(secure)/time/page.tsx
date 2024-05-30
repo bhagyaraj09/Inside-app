@@ -8,7 +8,7 @@ import { getProjectsByResource } from '@/src/actions/sowResource'
 import { getServicesData } from '@/src/actions/service';
 import { fetchResource } from '@/src/actions/resource'
 import { fetchTime, submitTimeForApproval } from '@/src/actions/timeSheet'
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Title from '@/components/ui/title'
 import Container from '@/components/ui/container'
@@ -26,8 +26,7 @@ export default function Time() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [dateMode, setDateMode] = useState("Day");
   const [totalHours, setTotalHours] = useState(0.0);
-  
-  
+    
   const handleSubmitforApproval = async() => {
     if(resource?.id){
       const curr = new Date(currentDate.toString()); // get current date
@@ -79,7 +78,7 @@ export default function Time() {
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
         const response =  await fetchTime(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
         setTimesheets(response); 
-        setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));     
+        setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));
       }
     } catch(error) {
       console.log(error);
@@ -119,7 +118,8 @@ export default function Time() {
                 <h2 className="text-lg font-medium py-3">Record your time<i className="ml-2 fa-regular fa-clock text-sm"></i></h2>
                 <TimeFormHeader />
                 <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' 
-                  defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
+                  defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} 
+                  setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode} setTotalHours={setTotalHours}/>
               </CardContent>
             </Card>
           </div>
@@ -131,8 +131,9 @@ export default function Time() {
                   <TimeFormHeader />
                   {timesheets.map((timesheet, index) => 
                     <div key={timesheet.id} className="border-b-4 mb-4 pb-4 md:mb-1 md:pb-0 md:border-b-0">                      
-                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} currentDate={currentDate} 
-                      setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
+                      <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' 
+                      defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} currentDate={currentDate} 
+                      setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode} setTotalHours={setTotalHours}/>
                     </div>                    
                   )}
                   <div className="mt-5">
