@@ -23,11 +23,12 @@ export default function Time() {
   const [selectedProject, setSelectedProject] = useState("");
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [dateMode, setDateMode] = useState("Day");
   const handleSubmitforApproval = async() => {
     if(resource?.id){
       const curr = new Date(currentDate.toString()); // get current date
       const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week      
-      const response =  await submitTimeForApproval(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + 6)));
+      const response =  await submitTimeForApproval(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))));
       setTimesheets(response);
     }  
   }
@@ -72,7 +73,7 @@ export default function Time() {
       if(resource?.id){
         const curr = new Date(currentDate.toString()); // get current date
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
-        const response =  await fetchTime(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + 6))); // last day is the first day + 6
+        const response =  await fetchTime(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
         setTimesheets(response);        
       }
     } catch(error) {
@@ -80,13 +81,13 @@ export default function Time() {
     }  
   }
   getTimesheets();
-  }, [resource?.id, currentDate]);
+  }, [resource?.id, currentDate, dateMode]);
   var newTimesheet: Timesheet = { id: '', email:session?.user.email?? "",  date: new Date(), sowId: '', resourceId: resource?.id?? "", serviceId: '', hours: undefined, description: '', billable: true, status: 'Added' }   
-  const handleNextWeek = () => {
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 7)));
+  const handleNext = () => {    
+    dateMode == "Day" ? setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 1))) : setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() + 7)));
   }
-  const handlePrevWeek = () => {
-    setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 7)));
+  const handlePrev = () => {
+    dateMode == "Day" ? setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 1))) : setCurrentDate(new Date(currentDate.setDate(currentDate.getDate() - 7)));
   }
   return (
     <>
@@ -95,11 +96,11 @@ export default function Time() {
         <div className="p-2">
           <div className="items-center justify-between">
             <div className="flex items-center">
-              <Button variant="outline" size="icon" onClick={handlePrevWeek}>
+              <Button variant="outline" size="icon" onClick={handlePrev}>
                 <i className="fa-solid fa-arrow-left"></i>
               </Button>
-              <WeekSelector currentDate={currentDate.toString()} />
-              <Button variant="outline" size="icon" onClick={handleNextWeek}>
+              <WeekSelector currentDate={currentDate.toString()} dateMode={dateMode} setDateMode={setDateMode} />
+              <Button variant="outline" size="icon" onClick={handleNext}>
                 <i className="fa-solid fa-arrow-right"></i>
               </Button>
               <Button variant="outline" className='ml-2'>
@@ -112,16 +113,16 @@ export default function Time() {
               <CardContent>
                 <h2 className="text-lg font-medium py-3">Record your time<i className="ml-2 fa-regular fa-clock text-sm"></i></h2>
                 <div className="hidden md:block md:flex mb-1">
-                  <span className='mr-1 w-32'>Date</span>
+                  <span className='mr-1 w-44'>Date</span>
                   <span className='mr-1 w-56'>Project</span>
-                  <span className='mr-1 w-40'>Service</span>
+                  <span className='mr-1 w-36'>Service</span>
                   <span className='mr-1 w-16'>Hours</span>
                   <span className='mr-1 w-56'>Description</span>
                   <span className='mr-1 w-20 flex justify-center'>Billable</span>
                   <span className='mr-1'></span>
                 </div>
                 <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' 
-                  defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} />
+                  defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
               </CardContent>
             </Card>
           </div>
@@ -133,16 +134,16 @@ export default function Time() {
                   {timesheets.map((timesheet, index) => 
                     <div key={timesheet.id} className="border-b-4 mb-4 pb-4 md:mb-1 md:pb-0 md:border-b-0">
                       <div className= {index==0 ? "hidden md:block md:flex" : "hidden"}>
-                        <span className='mr-1 w-32'>Date</span>
+                        <span className='mr-1 w-44'>Date</span>
                         <span className='mr-1 w-56'>Project</span>
-                        <span className='mr-1 w-40'>Service</span>
+                        <span className='mr-1 w-36'>Service</span>
                         <span className='mr-1 w-16'>Hours</span>
                         <span className='mr-1 w-56'>Description</span>
                         <span className='mr-1 w-20 flex justify-center'>Billable</span>
                         <span className='mr-1'></span>
                       </div>
                       <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} currentDate={currentDate} 
-                      setTimesheets={setTimesheets} resourceId={resource?.id ?? ""}/>
+                      setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
                     </div>
                   )}
                   <div className="mt-5">

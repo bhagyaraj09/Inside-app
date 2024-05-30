@@ -6,7 +6,7 @@ import { Timesheet } from '@/types';
 export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
     startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);    
+    endDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,

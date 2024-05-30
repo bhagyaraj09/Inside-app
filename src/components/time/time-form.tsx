@@ -19,6 +19,7 @@ interface TimeFormProps {
     defaultService: string
     currentDate: Date;
     resourceId: string;
+    dateMode: string;
     setTimesheets: React.Dispatch<React.SetStateAction<Timesheet[]>>;
 }
 
@@ -33,8 +34,8 @@ export default function TimeForm(props: TimeFormProps) {
     const getTimesheets = async() => {
         try{
             const curr = new Date(props.currentDate.toString()); // get current date
-            const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
-            const response =  await fetchTime(props.resourceId ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + 6))); // last day is the first day + 6
+            const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
+            const response =  await fetchTime(props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
             props.setTimesheets(response);
         } catch(error) {
           console.log(error);
@@ -80,7 +81,7 @@ export default function TimeForm(props: TimeFormProps) {
             <input type="hidden" name="email" value={props.timesheet.email} />
             <input type="hidden" name="resourceId" value={props.timesheet.resourceId} />
             <span className='mr-1 w-full md:w-44'>
-                <DatesSelect currentDate={props.currentDate} selectedDate={new Date(props.timesheet.date).toLocaleDateString()} disabled={disabled}/>
+                <DatesSelect currentDate={props.currentDate} selectedDate={new Date(props.timesheet.date).toLocaleDateString()} disabled={disabled} dateMode={props.dateMode}/>
             </span>
             <span className='mr-1 w-full md:w-56'>
                 <ProjectsSelect projects={props.projects} id={props.defaultProject}  disabled={disabled}/>
@@ -96,7 +97,7 @@ export default function TimeForm(props: TimeFormProps) {
             </span>
             <span className='mr-1 w-full md:w-20 md:grid md:items-center md:justify-center'>
                 <div className='md:flex items-center justify-center'>
-                    <Checkbox checked={billable} onCheckedChange={setTimeBillable} name="billable" id="billable">Billable</Checkbox>                    
+                    <Checkbox checked={billable} onCheckedChange={setTimeBillable} name="billable" id="billable" disabled={disabled}>Billable</Checkbox>                    
                 </div>
             </span>
             {props.formType == "Edit" ?                
