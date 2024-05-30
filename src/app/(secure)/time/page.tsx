@@ -13,6 +13,7 @@ import { useSession } from "next-auth/react";
 import Title from '@/components/ui/title'
 import Container from '@/components/ui/container'
 import TimeForm from '@/src/components/time/time-form'
+import TimeFormHeader from "@/src/components/time/time-form-header"
 
 export default function Time() {
   const { data: session, status } = useSession();
@@ -24,6 +25,9 @@ export default function Time() {
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [dateMode, setDateMode] = useState("Day");
+  const [totalHours, setTotalHours] = useState(0.0);
+  
+  
   const handleSubmitforApproval = async() => {
     if(resource?.id){
       const curr = new Date(currentDate.toString()); // get current date
@@ -71,10 +75,11 @@ export default function Time() {
   const getTimesheets = async() => {
     try{
       if(resource?.id){
-        const curr = new Date(currentDate.toString()); // get current date
+        const curr = new Date(currentDate.toString()); // get current date        
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
         const response =  await fetchTime(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
-        setTimesheets(response);        
+        setTimesheets(response); 
+        setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));     
       }
     } catch(error) {
       console.log(error);
@@ -112,15 +117,7 @@ export default function Time() {
             <Card>
               <CardContent>
                 <h2 className="text-lg font-medium py-3">Record your time<i className="ml-2 fa-regular fa-clock text-sm"></i></h2>
-                <div className="hidden md:block md:flex mb-1">
-                  <span className='mr-1 w-44'>Date</span>
-                  <span className='mr-1 w-56'>Project</span>
-                  <span className='mr-1 w-36'>Service</span>
-                  <span className='mr-1 w-16'>Hours</span>
-                  <span className='mr-1 w-56'>Description</span>
-                  <span className='mr-1 w-20 flex justify-center'>Billable</span>
-                  <span className='mr-1'></span>
-                </div>
+                <TimeFormHeader />
                 <TimeForm projects={projects} services={services} timesheet={newTimesheet} formType='Add' 
                   defaultProject={selectedProject} defaultService={selectedService} currentDate={currentDate} setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
               </CardContent>
@@ -131,23 +128,18 @@ export default function Time() {
               <Card>
                 <CardContent>                
                   <h2 className="text-lg font-medium py-3">Timesheet<i className="ml-2 fa-solid fa-table-cells text-sm"></i></h2>                
+                  <TimeFormHeader />
                   {timesheets.map((timesheet, index) => 
-                    <div key={timesheet.id} className="border-b-4 mb-4 pb-4 md:mb-1 md:pb-0 md:border-b-0">
-                      <div className= {index==0 ? "hidden md:block md:flex" : "hidden"}>
-                        <span className='mr-1 w-44'>Date</span>
-                        <span className='mr-1 w-56'>Project</span>
-                        <span className='mr-1 w-36'>Service</span>
-                        <span className='mr-1 w-16'>Hours</span>
-                        <span className='mr-1 w-56'>Description</span>
-                        <span className='mr-1 w-20 flex justify-center'>Billable</span>
-                        <span className='mr-1'></span>
-                      </div>
+                    <div key={timesheet.id} className="border-b-4 mb-4 pb-4 md:mb-1 md:pb-0 md:border-b-0">                      
                       <TimeForm key={timesheet.id} projects={projects} services={services} timesheet={timesheet} formType='Edit' defaultProject={timesheet.sowId} defaultService={timesheet.serviceId} currentDate={currentDate} 
                       setTimesheets={setTimesheets} resourceId={resource?.id ?? ""} dateMode={dateMode}/>
-                    </div>
+                    </div>                    
                   )}
                   <div className="mt-5">
+                    <div className="flex items-center">
+                      <span className="font-semibold mr-2">Total Hours: {totalHours}</span>
                       <Button variant="outline" onClick={handleSubmitforApproval}><span className='text-green-800 font-semibold'><i className="mr-2 fa-solid fa-list-check"></i>Submit for Approval</span></Button>
+                    </div>
                   </div>                
                 </CardContent>
               </Card>

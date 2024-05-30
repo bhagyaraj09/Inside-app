@@ -6,7 +6,7 @@ import { Timesheet } from '@/types';
 export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
     startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);    
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -27,17 +27,22 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
                 gte: startDate,
                 lte: endDate
             }
-        },
+        },        
+        orderBy: {
+            date: "asc"            
+        }
     });
     return JSON.parse(JSON.stringify(data));
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
 
 export async function updateTime(formData: FormData){
-    "use server";       
+    "use server";    
+    let timesheetDate = new Date(formData.get("date") as string);
+    timesheetDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.update({
         data: {
-            date: new Date(formData.get("date") as string),
+            date: timesheetDate,
             email: formData.get("email") as string,
             statementOfWork: {
                 connect: {
@@ -61,10 +66,12 @@ export async function updateTime(formData: FormData){
 }
 
 export async function addTime(formData: FormData){
-    "use server";   
+    "use server";
+    let timesheetDate = new Date(formData.get("date") as string);
+    timesheetDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.create ({
         data: {
-            date: new Date(formData.get("date") as string),
+            date: timesheetDate,
             email: formData.get("email") as string,
             statementOfWork: {
                 connect: {
@@ -101,10 +108,9 @@ export async function deleteTime(id: string){
 }
 
 export async function submitTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
-    "use server";
-    console.log(resourceId, startDate, endDate);
+    "use server";    
     startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);        
+    endDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.updateMany({
         data: {
             status: "Submitted"
