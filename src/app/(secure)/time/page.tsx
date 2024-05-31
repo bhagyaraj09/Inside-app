@@ -31,7 +31,7 @@ export default function Time() {
     if(resource?.id){
       const curr = new Date(currentDate.toString()); // get current date
       const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week      
-      const response =  await submitTimeForApproval(resource?.id ?? "", new Date(curr.setDate(first)), new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))));
+      const response =  await submitTimeForApproval(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))));
       setTimesheets(response);
     }  
   }

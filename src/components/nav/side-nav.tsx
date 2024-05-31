@@ -18,17 +18,16 @@ export default function SideNav() {
     useEffect(() => {
         setIsOpen(false); // Close the navigation panel
     }, [ pathname ]);
-
     let data: TreeNodeType[] = [];
-
     data.push(DashboardMenu);
-    data.push(TimeMenu);
-    data.push(LeaveMenu);
-    if(session?.user.roles.includes('Admin'))
-        data.push(AdminMenu);
-    data.push(LeavePolicyMenu);
+    data.push(TimeMenu);    
     data.push(HolidayMenu);
-    data.push(HRMenu);
+    if(session?.user.roles.includes('Admin')){
+        data.push(LeaveMenu);
+        data.push(AdminMenu);
+        data.push(LeavePolicyMenu);
+    }    
+    data.push(HRMenu);    
     data.push(EthicsMenu);
     data.push(AboutMenu);
     data.push(ContactMenu);
