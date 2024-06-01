@@ -34,20 +34,22 @@ export default function HolidaySchedule() {
               </svg>
             </CardHeader>
             <CardContent>
-              <ul className="list-decimal list-inside">
+              <ul className="list-decimal list-inside mb-3">
                 <li>New Year&apos;s Day - Jan 1st</li>
-                <li>President&apos;s Day - Feb 19th</li>
+                <li>Birthday of Martin Luther King, Jr. - Jan 15th</li>
+                <li>President&apos;s Day - Feb 19th*</li>
                 <li>Memorial Day - May 27th</li>
                 <li>Independence Day - Jul 4th</li>
                 <li>Labor Day - Sep 2nd</li>
+                <li>Veteran&apos;s Day  - Nov 11th</li>
                 <li>Thanksgiving Day - Nov 28th</li>
                 <li>Friday following Thanksgiving - Nov 29th</li>
-                <li>Christmas Day - Dec 25th</li>
-                <li>Day of your choosing</li>
+                <li>Christmas Day - Dec 25th</li>                
               </ul>
+              <p>*If a holiday falls on a Saturday, the preceding Friday will be treated as a holiday for pay and leave purposes. If a holiday falls on a Sunday, the following Monday will be treated as a holiday for pay and leave purposes.</p>  
             </CardContent>
           </Card>
-        </div>      
+        </div>            
       </Container>
     </>
   )
