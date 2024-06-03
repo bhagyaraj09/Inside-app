@@ -14,9 +14,9 @@ export default function DatesSelect(props: DatesSelectProps) {
   return (
     <select id="date" name="date" defaultValue={props.selectedDate} className="p-1.5 border rounded-md w-full"  disabled={props.disabled}>
         {props.dateMode == "Day" ? 
-          <option key = {props.currentDate.toLocaleDateString()} value={props.currentDate.toLocaleDateString()}>{props.currentDate.toDateString()}</option>
+          <option key = {new Date(props.currentDate.toISOString()).toDateString()} value={new Date(props.currentDate.toISOString()).toDateString()}>{new Date(props.currentDate.toISOString()).toDateString()}</option>
           : datesArray.map((date, index) => (
-            <option key = {date.toLocaleDateString()} value={date.toLocaleDateString()}>{date.toDateString()}</option>
+            <option key = {new Date(date.toISOString()).toDateString()} value={new Date(date.toISOString()).toDateString()}>{new Date(date.toISOString()).toDateString()}</option>
         ))}
     </select>
   );

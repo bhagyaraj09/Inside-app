@@ -106,7 +106,41 @@ export async function deleteTime(id: string){
     });
     revalidatePath("/time");
 }
-
+export async function getTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";    
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);
+    const data = await prisma.timesheet.findMany({
+        select: {
+            id: true,
+            date: true,
+            email: true,
+            sowId: true,        
+            resourceId: true,                
+            serviceId: true,
+            hours: true,        
+            description: true,
+            billable: true,
+            status: true,
+            createdAt: true,        
+        },    
+        where: {
+            date: {
+                gte: startDate,
+                lte: endDate
+            },
+            resourceId: resourceId,
+            OR: [
+                {status:  "Submitted"},
+                {status:"Approved"},       
+            ] 
+        },
+        orderBy: {
+            date: "asc"            
+        }
+    });
+    return JSON.parse(JSON.stringify(data));
+}
 export async function submitTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";    
     startDate.setHours(0,0,0,0);
@@ -134,6 +168,6 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
                 }
             ]
         }
-    });    
+    });
     return fetchTime(resourceId, startDate, endDate);
 }

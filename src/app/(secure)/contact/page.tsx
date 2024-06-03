@@ -14,7 +14,7 @@ export default function Contact() {
       <Container className='flex flex-wrap'>
         <Card className='m-2 sm:w-96'>
           <CardContent className="grid pt-6">
-            <Image src="/team/Adam_Carbone.jpeg" alt="team_image" width={384} height={256}/>
+            <Image src="/team/Adam_Carbone.png" alt="team_image" width={384} height={256}/>
           </CardContent>
           <CardFooter className='flex-col'>
           <div className="text-xl font-bold">Adam Carbone</div>
