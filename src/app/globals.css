@@ -68,9 +68,8 @@
   }
   
   .powered-by{
-    margin-top:120px;
+    margin-top:60px;
     color: rgb(var(--foreground-rgb));
-    background: rgb(var(--background-start-rgb));
     padding: 15px 15px 0px 15px;
   }
    ul.list-disc > li {

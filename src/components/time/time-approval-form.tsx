@@ -18,6 +18,10 @@ interface TimeFormProps {
 
 export default function TimeApprovalForm(props: TimeFormProps) {
     const [error, setError] = useState<string>('');
+    const [billable, setBillable] = useState<boolean>(true);
+    function setTimeBillable(timeBillable: boolean){    
+        setBillable(timeBillable);
+    }
     //const disabled: boolean = props.timesheet?.status!= "Added" && props.timesheet?.status != "Rejected";    
     
     const getTimesheets = async() => {
@@ -51,8 +55,10 @@ export default function TimeApprovalForm(props: TimeFormProps) {
             <span className='mr-1 w-full md:w-56'>
                 {timesheet.description}
             </span>
-            <span className='mr-1 w-full md:w-56'>
-                {timesheet.billable ? "Billable" : "Non-Billable"}
+            <span className='mr-1 w-full md:w-20 md:grid md:items-center md:justify-center'>
+                <div className='md:flex items-center justify-center'>
+                    <Checkbox checked={billable} onCheckedChange={setTimeBillable} name="billable" id="billable">Billable</Checkbox>                    
+                </div>
             </span>
             <span className="w-full md:w-24 md:grid md:items-center md:justify-center">
                 <span className="mr-1 font-semibold text-blue-800">

@@ -11,11 +11,11 @@ export default async function signInPage() {
     return redirect("/")
 
   return ( 
-    <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto min-h-screen lg:py-0">
-      <h1 className="text-3xl mb-5 font-bold leading-tight tracking-tight text-gray-900 md:text-3xl ">Employee Portal</h1>
+    <div className="flex flex-col items-center justify-center px-4 py-6 mx-auto lg:py-0">
+      <h1 className="text-3xl mb-5 font-medium leading-tight tracking-tight text-gray-900">Employee Portal</h1>
       <div className="w-full bg-white rounded-lg border border-purple-400 md:mt-0 sm:max-w-md xl:p-0 ">
         <div className="flex flex-col p-6 space-y-4 items-center justify-center md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl ">
+            <h1 className="text-xl font-medium leading-tight tracking-tight text-gray-900 ">
                 Sign in to your account
             </h1>
             <SignInWithAzure /> 

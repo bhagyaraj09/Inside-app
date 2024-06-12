@@ -32,6 +32,7 @@ export default function TimeForm(props: TimeFormProps) {
         props.timesheet.billable = timeBillable;        
         setBillable(timeBillable);
     }
+
     const getTimesheets = async() => {
         try{
             const curr = new Date(props.currentDate.toString()); // get current date

@@ -189,6 +189,17 @@ export default function Contact() {
             </div>
           </CardFooter>
         </Card>
+        <Card className='m-2 sm:w-96'>
+          <CardContent className="grid pt-6">
+          <Image src="/team/Zac_Walker.jpg" alt="team_image" width={384} height={256}/>
+          </CardContent>
+          <CardFooter className='flex-col'>
+            <div className="text-xl font-bold">Zac Walker</div>
+            <div className="text-xs text-muted-foreground">
+              <i className="fa-solid fa-at mr-1"></i>zac.walker@symphonize.com
+            </div>
+          </CardFooter>
+        </Card>
       </Container>
     </>
   )
