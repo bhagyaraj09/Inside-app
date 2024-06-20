@@ -10,6 +10,7 @@ import DatesSelect from './dates-select'
 import { FormType, SOWResource, Service, Timesheet } from '@/types';
 import { addTime, deleteTime, fetchTime, updateTime } from '@/src/actions/timeSheet';
 import Conditional from '@/components/custom/conditional'
+import { dateWithoutTimeZone } from '@/src/lib/utils'
 interface TimeFormProps {
     projects: SOWResource[];
     services: Service[];
@@ -43,12 +44,6 @@ export default function TimeForm(props: TimeFormProps) {
         } catch(error) {
           console.log(error);
         }  
-    }
-    const dateWithoutTimeZone = (date: Date) => {   
-        const tzoffset = new Date(date).getTimezoneOffset() * 60000;        
-        const withoutTimezone = new Date(new Date(date).valueOf() + tzoffset)
-            .toDateString();
-        return withoutTimezone;        
     }
     const validateNumber = (inputData: string, setError: (error: string) => void) => {
         if (!inputData || isNaN(Number(inputData))) {

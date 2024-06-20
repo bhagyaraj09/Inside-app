@@ -2,13 +2,14 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Timesheet } from "@/types";
+import { dateWithoutTimeZone } from "@/src/lib/utils";
 
 export const columns: ColumnDef<Timesheet>[] = [
   {
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => {            
-      return <>{new Date(row.getValue("date")).toDateString()}</>
+      return <div className="w-36">{new Date(dateWithoutTimeZone(new Date(row.getValue("date")))).toDateString()}</div>
     },
   },
   {
