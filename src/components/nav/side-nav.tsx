@@ -79,7 +79,7 @@ export default function SideNav() {
                 </Treeview.Root>
                 <MobileLogout />
                 <HSpacer />
-                <PoweredBy />
+                <PoweredBy color={"white"} />
             </div>
         </nav>
     );
