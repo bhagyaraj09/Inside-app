@@ -39,6 +39,7 @@ export default function HumanResources() {
               <p className="text-xs text-muted-foreground">
               <i className="fa-solid fa-at mr-1"></i>nikole.velo@symphonize.com
               </p>
+              <p className="text-xs text-muted-foreground"><i className="fa-solid fa-phone mr-1"></i>(916) 917-7778</p>
             </CardContent>
           </Card>
         </div>

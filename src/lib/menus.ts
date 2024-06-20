@@ -91,6 +91,23 @@ export const AdminMenu: TreeNodeType =  {
         },
     ]
 }
+export const PMMenu: TreeNodeType =  {
+    id: '6',
+    name: 'Admin',
+    url: '',
+    children:[        
+        {
+            id: '61',
+            name: 'Approve Time',
+            url: '/admin/approve-time',
+        },
+        {
+            id: '63',
+            name: 'Time Reports',
+            url: '/admin/time-report',
+        },
+    ]
+}
 export const HolidayMenu: TreeNodeType = {
     id: '7',
     name: 'Holiday Schedule',

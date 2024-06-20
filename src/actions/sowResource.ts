@@ -2,6 +2,37 @@
 import prisma from "@/utils/db";
 import { SOWResource } from '@/types'
 
+export async function getResourcesBySOW(sowId: string) : Promise<SOWResource[]> {   
+    if(sowId){
+        const data = await prisma.sOWResource.findMany ({
+            select: {
+                id: true,
+                sowId: true,
+                resourceId: true,
+                resource: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    }
+                },
+                active: true,
+            },   
+            where: {
+                sowId: sowId,
+                active: true,
+            },
+            orderBy: {
+                resource: {
+                    name: "asc"
+                }
+            }
+        });
+        return data;
+    }
+    return [];
+}
+
 export async function getProjectsByResource(email: string) : Promise<SOWResource[]> {
     if(email){
         const data = await prisma.sOWResource.findMany ({

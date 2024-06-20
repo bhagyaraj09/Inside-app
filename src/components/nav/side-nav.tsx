@@ -6,7 +6,7 @@ import { Treeview, TreeNodeType } from '@/components/ui/treeview'
 import PoweredBy from '@/components/nav/powered-by';
 import HSpacer from '@/components/ui/h-spacer';
 import MobileLogout from '@/components/nav/mobile-logout';
-import { AboutMenu, DashboardMenu, TimeMenu, LeaveMenu, EthicsMenu, ContactMenu, AdminMenu, HRMenu, HolidayMenu, LeavePolicyMenu } from '@/src/lib/menus';
+import { AboutMenu, DashboardMenu, TimeMenu, LeaveMenu, EthicsMenu, ContactMenu, AdminMenu, HRMenu, HolidayMenu, LeavePolicyMenu, PMMenu } from '@/src/lib/menus';
 import { useSession } from 'next-auth/react';
 
 export default function SideNav() {
@@ -26,7 +26,10 @@ export default function SideNav() {
         data.push(LeaveMenu);
         data.push(AdminMenu);
         data.push(LeavePolicyMenu);
-    }    
+    }  
+    if(session?.user.roles.includes('EngagementManager')) {
+        data.push(PMMenu);
+    }
     data.push(HRMenu);    
     data.push(EthicsMenu);
     data.push(AboutMenu);
