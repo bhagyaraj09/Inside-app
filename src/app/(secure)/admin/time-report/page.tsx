@@ -12,6 +12,7 @@ import { getResourcesBySOW } from '@/src/actions/sowResource';
 import { fetchTimeBySOWId } from '@/src/actions/timeSheet';
 import { DataTable } from '@/src/components/ui/data-table';
 import { columns } from './columns';
+import * as XLSX from "xlsx";
 
 
 export default function TimeReport() {
@@ -24,6 +25,24 @@ export default function TimeReport() {
   const [timesheets, setTimesheets] = useState<Timesheet[]>([]);  
   const [totalHours, setTotalHours] = useState(0.0);
 
+  const handleExport = () => {
+    const ws = XLSX.utils.json_to_sheet(timesheets.map( timesheet => {
+      return {
+        "Resource": timesheet.resource?.name,
+        "Project": timesheet.statementOfWork?.project?.name,
+        "SOW": timesheet.statementOfWork?.name,
+        "Date": timesheet.date,
+        "Hours": timesheet.hours,
+        "Service": timesheet.service?.name,
+        "Description": timesheet.description,
+        "Billable": timesheet.billable,
+        "Status": timesheet.status,
+      }
+    }));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Timesheets");
+    XLSX.writeFile(wb, "timesheets.xlsx");
+  }
   const handleNext = () => {    
     if(dateMode == "Month"){
       if (currentDate.getMonth() == 11) {
@@ -103,8 +122,11 @@ export default function TimeReport() {
                   <Button variant="outline" size="icon" onClick={handleNext}>
                     <i className="fa-solid fa-arrow-right"></i>
                   </Button>
-                  <Button variant="outline" className='ml-2'>
+                  <Button variant="outline" className='ml-2 hidden'>
                     <i className="fa-solid fa-print md:mr-2"></i><span className='hidden md:block'>Print Time</span>
+                  </Button>
+                  <Button variant="outline" className='ml-2' onClick={handleExport}>
+                    <i className="fa-solid fa-file-export md:mr-2"></i><span className='hidden md:block'>Export Time</span>
                   </Button>
                 </div>
                 <div className="flex items-center">                    

@@ -45,8 +45,26 @@ export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: 
             id: true,
             date: true,
             email: true,
-            sowId: true,        
-            resourceId: true,                
+            sowId: true, 
+            statementOfWork: {
+                select: {
+                    id: true,
+                    name: true,
+                    project: {
+                        select: {
+                            id: true,
+                            name: true,
+                        }
+                    }
+                }
+            },       
+            resourceId: true,  
+            resource: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },              
             serviceId: true,
             service: {
                 select: {
@@ -68,8 +86,10 @@ export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: 
             }
         },        
         orderBy: {
-            date: "asc"            
-        }
+            resource: {
+                name: "asc",
+            },         
+        },
     });
     return JSON.parse(JSON.stringify(data));
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
