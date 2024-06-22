@@ -20,7 +20,6 @@ export async function getResourcesBySOW(sowId: string) : Promise<SOWResource[]> 
             },   
             where: {
                 sowId: sowId,
-                active: true,
             },
             orderBy: {
                 resource: {

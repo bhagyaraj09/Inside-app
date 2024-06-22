@@ -18,9 +18,6 @@ export async function getAllSOWs() : Promise<StatementOfWork[]> {
                     customerId: true,
                 }
             }
-        },   
-        where: {
-            active: true,
         },
         orderBy: {
             project: {
