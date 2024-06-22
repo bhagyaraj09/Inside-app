@@ -95,6 +95,63 @@ export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: 
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
 
+export async function fetchTimeByResourceId(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";
+    startDate.setHours(0,0,0,0);
+    endDate.setHours(0,0,0,0);
+    const data = await prisma.timesheet.findMany ({
+        select: {
+            id: true,
+            date: true,
+            email: true,
+            sowId: true, 
+            statementOfWork: {
+                select: {
+                    id: true,
+                    name: true,
+                    project: {
+                        select: {
+                            id: true,
+                            name: true,
+                        }
+                    }
+                }
+            },       
+            resourceId: true,  
+            resource: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },              
+            serviceId: true,
+            service: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
+            hours: true,        
+            description: true,
+            billable: true,
+            status: true,
+            createdAt: true,        
+        },    
+        where: {
+            resourceId: resourceId,
+            date: {
+                gte: startDate,
+                lte: endDate
+            }
+        },        
+        orderBy: {
+            date: "asc",
+        },
+    });
+    return JSON.parse(JSON.stringify(data));
+    //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
+}
+
 export async function updateTime(formData: FormData){
     "use server";    
     let timesheetDate = new Date(formData.get("date") as string);
