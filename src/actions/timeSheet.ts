@@ -234,6 +234,12 @@ export async function getTimeForApproval(resourceId: string, startDate: Date, en
             sowId: true,        
             resourceId: true,                
             serviceId: true,
+            service: {
+                select: {
+                    id: true,
+                    name: true,
+                }
+            },
             hours: true,        
             description: true,
             billable: true,

@@ -66,24 +66,24 @@ export default function ApproveTime() {
                 <WeekSelector currentDate={currentDate.toString()} dateMode={dateMode} setDateMode={setDateMode} />
                 <Button variant="outline" size="icon" onClick={handleNext}>
                   <i className="fa-solid fa-arrow-right"></i>
-                </Button>                    
-                <Button variant="outline" className='ml-2'>
-                  <i className="fa-regular fa-clock md:mr-2"></i><span className='hidden md:block'>Get Time</span>
                 </Button>
               </div>
             </div>
             <Card>
               <CardContent>                
-                <div className="items-center justify-between">
-                  <div className="flex items-center pt-5">                    
+                <div className="items-center justify-between mb-4">
+                  <div className="flex items-center pt-5">
                     <span className='mr-2  font-medium'>Resource:</span>
-                    <span className='w-60 mr-2'><ResourcesSelect resources={resources} disabled={false} setResourceId={setResourceId}/></span>
+                    <span className='w-60 mr-2'>
+                      <ResourcesSelect resources={resources} disabled={false} setResourceId={setResourceId}/>
+                      
+                    </span>
                   </div>
                 </div>
                 <TimeApprovalForm timesheets={timesheets} currentDate={currentDate} setTimesheets={setTimesheets} setTotalHours={setTotalHours} resourceId={''} dateMode={dateMode} />
               </CardContent>
             </Card>
-        </div>        
+        </div>
       </Container>
     </>
   )

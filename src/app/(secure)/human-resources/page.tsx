@@ -39,7 +39,7 @@ export default function HumanResources() {
         </div>
         <div className="grid pt-6 px-4">
           <h1 className='font-semibold text-2xl text-gray-600 mb-4'>Frequently Asked Questions</h1>
-          <Accordion type="single" collapsible className="w-full text-lg text-blue-700">
+          <Accordion type="single" collapsible className="w-full text-lg text-blue-700 px-6">
             <AccordionItem value="item-1">
               <AccordionTrigger>1. How can I access my pay stubs and employment records?</AccordionTrigger>
               <AccordionContent className="text-lg text-gray-500 border rounded-lg p-4 mb-4">
