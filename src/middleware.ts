@@ -29,4 +29,5 @@ export default withAuth(
   }
 )
 
-export const config = {matcher: ["/admin/:path*", "/customers/:path*", "/"]}
+export const config = {matcher: ["/admin/:path*", "/about/:path*", "/encc/:path*",
+                                  "/contact",  "/time", "/leave", "/holiday-schedule", "/human-resources", "/leave-policy", "/"]}
