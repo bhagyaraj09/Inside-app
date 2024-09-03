@@ -8,11 +8,11 @@ export async function fetchTime(resourceId: string, startDate: string, endDate: 
     "use server";
     console.log("ssssssssssssssssssssssssssssssssssssssss",{startDate,endDate})
     console.log("before modifying",{startDate,endDate})
-    const startDateVal=new Date(startDate) 
-    const endDateVal=new Date(endDate)
-    startDateVal.setHours(0,0,0,0);
-    endDateVal.setHours(0,0,0,0);    
-    console.log("after modifying modifying",{startDateVal,endDateVal})
+    const startDateArr=startDate.split(":")
+    const startDateVal=new Date(Date.UTC(parseInt(startDateArr[2]),parseInt(startDateArr[1]),parseInt(startDateArr[0]) ,0,0,0,0))
+    const endDateArr=endDate.split(":")
+    const endDateVal = new Date(Date.UTC(parseInt(endDateArr[2]), parseInt(endDateArr[1]), parseInt(endDateArr[0]), 0, 0, 0, 0));
+        console.log("after modifying modifying",{startDateVal,endDateVal})
 
     const data = await prisma.timesheet.findMany ({
         select: {
@@ -306,5 +306,7 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
             ]
         }
     });
-    return fetchTime(resourceId, startDate.toISOString(), endDate.toISOString());
+    const startDateValue=`${startDate.getDate()}:${startDate.getMonth()}:${startDate.getFullYear()}`
+         const endDateValue=`${endDate.getDate()}:${endDate.getMonth()}:${endDate.getFullYear()}`
+    return fetchTime(resourceId, startDateValue, endDateValue);
 }

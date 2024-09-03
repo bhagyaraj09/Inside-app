@@ -78,9 +78,11 @@ export default function Time() {
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
         const valStartDate= dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first))
             const valEndDate=dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))
-            console.log("ssssssssssssssssssssssssssssssssssssssss",{valStartDate,valEndDate})
-         
-        const response =  await fetchTime(resource?.id ?? "", dateMode == "Day" ? new Date(curr).toISOString() : new Date(curr.setDate(first)).toISOString(), dateMode == "Day" ? new Date(curr).toISOString() : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))).toISOString()); // last day is the first day + 6
+            console.log("ssssssssssssssssssssssssssssssssssssssss",valStartDate.getDate(), valStartDate.getFullYear(),valStartDate.getMonth(),valEndDate.getDate())
+         const startDateValue=`${valStartDate.getDate()}:${valStartDate.getMonth()}:${valStartDate.getFullYear()}`
+         const endDateValue=`${valEndDate.getDate()}:${valEndDate.getMonth()}:${valEndDate.getFullYear()}`
+
+        const response =  await fetchTime(resource?.id ?? "", startDateValue, endDateValue); // last day is the first day + 6
         setTimesheets(response); 
         setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));
       }
