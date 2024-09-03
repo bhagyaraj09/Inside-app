@@ -3,11 +3,17 @@ import { revalidatePath } from "next/cache";
 import prisma from "../app/utils/db";
 import { Timesheet } from '@/types';
 
-export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+export async function fetchTime(resourceId: string, startDate: string, endDate: string  ) : Promise<Timesheet[]> {
+
     "use server";
-    console.log({startDate,endDate})
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);    
+    console.log("ssssssssssssssssssssssssssssssssssssssss",{startDate,endDate})
+    console.log("before modifying",{startDate,endDate})
+    const startDateVal=new Date(startDate) 
+    const endDateVal=new Date(endDate)
+    startDateVal.setHours(0,0,0,0);
+    endDateVal.setHours(0,0,0,0);    
+    console.log("after modifying modifying",{startDateVal,endDateVal})
+
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -25,17 +31,20 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
         where: {
             resourceId: resourceId,
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: startDateVal,
+                lte: endDateVal
             }
         },        
         orderBy: {
             date: "asc"            
         }
     });
+    console.log({data});
+    console.log("----------------------------------------------------")
     return JSON.parse(JSON.stringify(data));
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
+
 
 export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
@@ -185,7 +194,9 @@ export async function updateTime(formData: FormData){
 export async function addTime(formData: FormData){
     "use server";
     let timesheetDate = new Date(formData.get("date") as string);
-
+    timesheetDate=  new Date(Date.UTC(timesheetDate.getFullYear(),timesheetDate.getMonth(),timesheetDate.getDay()+1))
+    console.log({timesheetDate},formData.get("date"))  
+    
 
 
     timesheetDate.setHours(0,0,0,0);
@@ -295,5 +306,5 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
             ]
         }
     });
-    return fetchTime(resourceId, startDate, endDate);
+    return fetchTime(resourceId, startDate.toISOString(), endDate.toISOString());
 }
