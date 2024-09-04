@@ -3,10 +3,12 @@ import { revalidatePath } from "next/cache";
 import prisma from "../app/utils/db";
 import { Timesheet } from '@/types';
 
-export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+export async function fetchTime(timezoneOffset: number, resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);    
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -24,8 +26,8 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
         where: {
             resourceId: resourceId,
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             }
         },        
         orderBy: {
@@ -263,18 +265,20 @@ export async function getTimeForApproval(resourceId: string, startDate: Date, en
     });
     return JSON.parse(JSON.stringify(data));
 }
-export async function submitTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
-    "use server";    
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+export async function submitTimeForApproval(timezoneOffset: number, resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);        
     const data = await prisma.timesheet.updateMany({
         data: {
             status: "Submitted"
         },
         where: {
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             },
             resourceId: resourceId,
             OR: [
@@ -291,5 +295,5 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
             ]
         }
     });
-    return fetchTime(resourceId, startDate, endDate);
+    return fetchTime(0, resourceId, UTCStartDate, UTCEndDate);
 }

@@ -38,7 +38,7 @@ export default function TimeForm(props: TimeFormProps) {
         try{
             const curr = new Date(props.currentDate.toString()); // get current date
             const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-            const response =  await fetchTime(props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
+            const response =  await fetchTime(new Date().getTimezoneOffset(), props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
             props.setTimesheets(response);
             props.setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));     
         } catch(error) {
