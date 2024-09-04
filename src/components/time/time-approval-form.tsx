@@ -63,6 +63,10 @@ export default function TimeApprovalForm(props: TimeFormProps) {
                                 </div>
                             </td>
                             <td className="p-2 align-middle">
+                                <>
+                                {console.log(timesheet.date)}
+                                </>
+                                
                                 <div className="w-36">{new Date(timesheet.date).toDateString()}</div>
                             </td>
                             <td className="p-2 align-middle">
