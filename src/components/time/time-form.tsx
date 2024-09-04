@@ -93,7 +93,7 @@ export default function TimeForm(props: TimeFormProps) {
             <input type="hidden" name="email" value={props.timesheet.email} />
             <input type="hidden" name="resourceId" value={props.timesheet.resourceId} />
             <span className='mr-1 w-full md:w-44'>
-                <DatesSelect currentDate={props.currentDate} selectedDate={props.formType == "Add" ? new Date(props.timesheet.date).toDateString() : dateWithoutTimeZone(props.timesheet.date)} disabled={disabled} dateMode={props.dateMode}/>
+                <DatesSelect currentDate={props.currentDate} formType={props.formType} selectedDate={props.formType == "Add" ? new Date(props.timesheet.date).toDateString() : dateWithoutTimeZone(props.timesheet.date)} disabled={disabled} dateMode={props.dateMode}/>
             </span>
             <span className='mr-1 w-full md:w-56'>
                 <ProjectsSelect projects={props.projects} id={props.defaultProject}  disabled={disabled}/>
