@@ -31,8 +31,8 @@ export default function Time() {
     if(resource?.id){
       const curr = new Date(currentDate.toString()); // get current date
       const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week      
-      const response =  await submitTimeForApproval(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))));
-      //setTimesheets(response);
+      const response =  await submitTimeForApproval(new Date().getTimezoneOffset(), resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6))));
+      setTimesheets(response);
     }  
   }
   useEffect(() => {    
@@ -62,7 +62,7 @@ export default function Time() {
       try{
         if(session?.user.email){
           const response =  await getProjectsByResource(session?.user.email as string);
-          setProjects(response)   
+          setProjects(response)          
         }
       } catch(error) {
         console.log(error);
@@ -76,7 +76,7 @@ export default function Time() {
       if(resource?.id){
         const curr = new Date(currentDate.toString()); // get current date        
         const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week        
-        const response =  await fetchTime(resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
+        const response =  await fetchTime(new Date().getTimezoneOffset(), resource?.id ?? "", dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
         setTimesheets(response); 
         setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));
       }
@@ -98,7 +98,7 @@ export default function Time() {
       <Title title="Time"></Title>
       <Container>
         <div className="p-2">
-          <div className="items-center w-8/12 justify-between">
+          <div className="items-center justify-between">
             <div className="flex items-center">
               <Button variant="outline" size="icon" onClick={handlePrev}>
                 <i className="fa-solid fa-arrow-left"></i>

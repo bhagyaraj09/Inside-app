@@ -95,7 +95,7 @@ return (
   <TableBody>
       {/* <LeaveTableRow/> */}
        {leaveList?.map((leave) => (
-        <LeaveTableRow leave={leave} />
+        <LeaveTableRow key={leave.id} leave={leave} />
       ))}
 
       
@@ -185,7 +185,7 @@ const data=await fetchLeavesByStartEndResource(startDate,endDate,selectResource,
               <SelectValue placeholder="Select by resource" />
             </SelectTrigger>
             <SelectContent>
-              {resourceList?.map((resource)=><SelectItem value={resource.id}>{resource.name}</SelectItem>
+              {resourceList?.map((resource)=><SelectItem key={resource.id} value={resource.id}>{resource.name}</SelectItem>
 )}
          
             </SelectContent>

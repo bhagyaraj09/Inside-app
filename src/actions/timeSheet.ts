@@ -2,11 +2,13 @@
 import { revalidatePath } from "next/cache";
 import prisma from "../app/utils/db";
 import { Timesheet } from '@/types';
-export async function fetchTime(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+
+export async function fetchTime(timezoneOffset: number, resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
-      
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);    
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -23,15 +25,10 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
         },    
         where: {
             resourceId: resourceId,
-           
-
-                    date: {
-                        gte: startDate, // Greater than or equal to startDate1
-                        lte: endDate // Less than or equal to endDate1
-                    }
-            
-                
-            
+            date: {
+                gte: UTCStartDate,
+                lte: UTCEndDate
+            }
         },        
         orderBy: {
             date: "asc"            
@@ -41,11 +38,13 @@ export async function fetchTime(resourceId: string, startDate: Date, endDate: Da
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
 
-export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+export async function fetchTimeBySOWId(timezoneOffset:number,sowId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
-
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);
+  
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -87,8 +86,8 @@ export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: 
         where: {
             sowId: sowId,
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             }
         },        
         orderBy: {
@@ -101,10 +100,12 @@ export async function fetchTimeBySOWId(sowId: string, startDate: Date, endDate: 
     //Only plain objects can be passed to Client Components from Server Components. Decimal objects are not supported.
 }
 
-export async function fetchTimeByResourceId(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+export async function fetchTimeByResourceId(timezoneOffset:number,resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.findMany ({
         select: {
             id: true,
@@ -146,8 +147,8 @@ export async function fetchTimeByResourceId(resourceId: string, startDate: Date,
         where: {
             resourceId: resourceId,
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             }
         },        
         orderBy: {
@@ -189,8 +190,6 @@ export async function updateTime(formData: FormData){
 
 export async function addTime(formData: FormData){
     "use server";
-   const dateString = formData.get("date") as string
-
     let timesheetDate = new Date(formData.get("date") as string);
     timesheetDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.create ({
@@ -230,10 +229,12 @@ export async function deleteTime(id: string){
     });
     revalidatePath("/time");
 }
-export async function getTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+export async function getTimeForApproval(timezoneOffset:number,resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
     "use server";    
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);
     const data = await prisma.timesheet.findMany({
         select: {
             id: true,
@@ -256,8 +257,8 @@ export async function getTimeForApproval(resourceId: string, startDate: Date, en
         },    
         where: {
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             },
             resourceId: resourceId,
             OR: [
@@ -269,21 +270,22 @@ export async function getTimeForApproval(resourceId: string, startDate: Date, en
             date: "asc"            
         }
     });
-
     return JSON.parse(JSON.stringify(data));
 }
-export async function submitTimeForApproval(resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
-    "use server";    
-    startDate.setHours(0,0,0,0);
-    endDate.setHours(0,0,0,0);
+export async function submitTimeForApproval(timezoneOffset: number, resourceId: string, startDate: Date, endDate: Date  ) : Promise<Timesheet[]> {
+    "use server";
+    let UTCStartDate = new Date(startDate.getTime() - timezoneOffset * 60000);
+    let UTCEndDate = new Date(endDate.getTime() - timezoneOffset * 60000);
+    UTCStartDate.setHours(0,0,0,0);
+    UTCEndDate.setHours(0,0,0,0);        
     const data = await prisma.timesheet.updateMany({
         data: {
             status: "Submitted"
         },
         where: {
             date: {
-                gte: startDate,
-                lte: endDate
+                gte: UTCStartDate,
+                lte: UTCEndDate
             },
             resourceId: resourceId,
             OR: [
@@ -300,8 +302,5 @@ export async function submitTimeForApproval(resourceId: string, startDate: Date,
             ]
         }
     });
-    const timeSheetData= await fetchTime(resourceId, startDate, endDate);
-    
-
-    return timeSheetData
+    return fetchTime(0, resourceId, UTCStartDate, UTCEndDate);
 }

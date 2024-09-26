@@ -77,7 +77,7 @@ export default function HolidaySchedule() {
                    <h1 className="text-lg font-semibold my-4">List of Holidays</h1>
 
             <div className="flex flex-row flex-wrap my-2" >
-                          {holidays?.map((holiday)=><HolidayCard eventName={holiday.eventName} description={holiday.description} date={holiday.date}/>)}
+                          {holidays?.map((holiday,index)=><HolidayCard key={`${holiday.eventName}${index}`} eventName={holiday.eventName} description={holiday.description} date={holiday.date}/>)}
             </div>
             <p>*If a holiday falls on a Saturday, the preceding Friday will be treated as a holiday for pay and leave purposes. If a holiday falls on a Sunday, the following Monday will be treated as a holiday for pay and leave purposes.</p>  
 
