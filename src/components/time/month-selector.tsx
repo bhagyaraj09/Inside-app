@@ -21,7 +21,6 @@ export function MonthSelector(props: MonthSelectorProps, {
     const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week 
     const toggleDateMode = () => {
       props.setDateMode(props.dateMode == "Week" ? "Month" : "Week");
-      console.log(props.currentDate, props.dateMode);
     }
   return (
     <div className={cn("border h-9 items-center justify-center rounded-md flex pr-2 w-76", className)}>

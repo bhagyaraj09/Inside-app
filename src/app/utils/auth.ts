@@ -32,6 +32,8 @@
 
 
 
+
+
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
  
@@ -54,7 +56,7 @@ export const authOptions: NextAuthOptions = {
             id: "1",
             name: "Test User",
             email: "test@example.com",
-            roles: ["User", "Admin"] // Example roles
+            roles: ["User","Admin"] // Example roles
           };
         }
         return null;
@@ -75,7 +77,7 @@ export const authOptions: NextAuthOptions = {
           id: token.id?token.id:"id",
           name: token.name,
           email: token.email,
-          roles: token.roles || [], // Ensure roles are set
+          roles: token.roles|| [], // Ensure roles are set
           picture: token.picture,
           initials: token.name?.split(' ').map(a => a[0]).join(''),
         };

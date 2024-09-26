@@ -35,7 +35,7 @@ export default function SideNav() {
     data.push(AboutMenu);
     data.push(ContactMenu);
     return(
-        <nav className="w-full md:w-72">
+        <nav className="w-full md:w-72" >
             <div className="w-full flex">
             <div className="flex items-center flex-shrink-0 text-white mr-6 pt-4 pl-3 pr-3 pb-4 md:pb-0 text-2xl">
                 <i className="fa-regular fa-address-card  mr-2 text-blue-400 justify-items-start"></i>                
@@ -73,7 +73,7 @@ export default function SideNav() {
                     onChange={select}
                     className="w-84 h-full m-2 text-slate-100 text-sm"
                     >
-                    {data.map(node => (
+                    {data.map((node) => (
                         <Treeview.Node node={node} key={node.id} />
                     ))}
                 </Treeview.Root>

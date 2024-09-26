@@ -32,7 +32,7 @@ export default function DailyActivities() {
                         Each employee must log actual time worked on a daily basis. Time should be entered at the end of each business/work day. Time sheets must be kept up-to-date.
                       </li>
                       <li>
-                        Time cannot be entered in advance with the exception of vacation, holidays and bereavement time.
+                        Time cannot be entered in advance with the exception of vocation, holidays and bereavement time.
                       </li>
                       <li>
                         Time is to be logged to each specific task on which an employee spent time.

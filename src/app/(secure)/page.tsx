@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import Title from "@/components/ui/title"
+import Container from "@/src/components/ui/container"
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -39,7 +40,7 @@ export default function DashboardPage() {
   return (
     <>
       <Title title="Dashboard"></Title>
-      <div className="flex-col flex px-5">
+      <Container className="flex-col flex px-5">
         <div className="grid mb-4 gap-4 md:grid-cols-2 lg:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -69,7 +70,7 @@ export default function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Available Vacation
+                Available Vocation
               </CardTitle>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -168,7 +169,9 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      
+      </Container>
+
     </>
   )
 }

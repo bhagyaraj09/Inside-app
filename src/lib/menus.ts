@@ -89,6 +89,12 @@ export const AdminMenu: TreeNodeType =  {
             name: 'Leave Reports',
             url: '/admin/leave-report',
         },
+        {
+            id: '65',
+            name: 'Events',
+            url: '/admin/events',
+
+        }
     ]
 }
 export const PMMenu: TreeNodeType =  {
@@ -106,6 +112,12 @@ export const PMMenu: TreeNodeType =  {
             name: 'Time Reports',
             url: '/admin/time-report',
         },
+        {
+            id: '65',
+            name: 'Events',
+            url: '/admin/events',
+
+        }
     ]
 }
 export const HolidayMenu: TreeNodeType = {

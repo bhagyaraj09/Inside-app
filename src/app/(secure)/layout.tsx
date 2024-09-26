@@ -25,7 +25,7 @@ export default async function RootLayout({
         <NextAuthProvider>
           <div className="content md:flex">
             <SideNav />
-            <main className="w-full sm:flex-1 md:min-h-screen bg-[#fff]">
+            <main className="w-8/12 sm:flex-1 md:min-h-screen bg-[#fff]">
               <div className="flex justify-between pr-5 p-1 bg-[#f0f0f0]">
                 <BreadCrumb
                   homeElement={'Home'}

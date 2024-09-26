@@ -34,11 +34,13 @@ export default function TimeForm(props: TimeFormProps) {
         setBillable(timeBillable);
     }
 
+    
+
     const getTimesheets = async() => {
         try{
             const curr = new Date(props.currentDate.toString()); // get current date
             const first = curr.getDate() - curr.getDay() + 1; // First day is the day of the month - the day of the week
-            const response =  await fetchTime(new Date().getTimezoneOffset(), props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
+            const response =  await fetchTime(props.resourceId ?? "", props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first)), props.dateMode == "Day" ? new Date(curr) : new Date(curr.setDate(first + (props.dateMode == "Day" ? 0 : 6)))); // last day is the first day + 6
             props.setTimesheets(response);
             props.setTotalHours (response.reduce((total, timesheet) => total + parseFloat(timesheet.hours?? 0), 0));     
         } catch(error) {
@@ -85,7 +87,9 @@ export default function TimeForm(props: TimeFormProps) {
             <input type="hidden" name="email" value={props.timesheet.email} />
             <input type="hidden" name="resourceId" value={props.timesheet.resourceId} />
             <span className='mr-1 w-full md:w-44'>
-                <DatesSelect currentDate={props.currentDate} selectedDate={props.formType == "Add" ? new Date(props.timesheet.date).toDateString() : dateWithoutTimeZone(props.timesheet.date)} disabled={disabled} dateMode={props.dateMode}/>
+                <DatesSelect currentDate={props.currentDate} selectedDate={props.formType == "Add" ? new Date(props.timesheet.date).toDateString() :  Date.UTC(new Date(props.timesheet.date).getFullYear(),new Date(props.timesheet.date).getMonth(),new Date(props.timesheet.date).getDay())} disabled={disabled} dateMode={props.dateMode}/>
+                {/* <DatesSelect currentDate={props.currentDate} selectedDate={props.formType == "Add" ? new Date(props.timesheet.date).toDateString() : dateWithoutTimeZone(props.timesheet.date)} disabled={disabled} dateMode={props.dateMode}/> */}
+
             </span>
             <span className='mr-1 w-full md:w-56'>
                 <ProjectsSelect projects={props.projects} id={props.defaultProject}  disabled={disabled}/>
