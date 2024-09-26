@@ -7,6 +7,7 @@ import EventForm from './form'
 import EventHistory from './eventHistory'
 
 
+
 interface Event {
   id: string; // UUID as a string
   eventName: string;
