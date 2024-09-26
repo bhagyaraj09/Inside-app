@@ -246,6 +246,7 @@ isActive    Boolean? @default(true)
 model EventType {
   id        String   @id @default(uuid())
   typeName  String   @unique
+  events    Event[]  @relation("EventTypeEvents")
 }
 
 model Event {
@@ -256,7 +257,9 @@ model Event {
   startTime   String
   endTime     String?
   eventMode   String
-  eventType   String
+  eventTypeId         String     // Foreign key for EventType
+
+  eventType    EventType  @relation("EventTypeEvents", fields: [eventTypeId], references: [id])
   isEventCancelled Boolean?
 
 
