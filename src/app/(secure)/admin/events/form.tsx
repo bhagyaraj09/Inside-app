@@ -166,7 +166,7 @@ const EventForm: React.FC<EventFormProps> = ({ events, setEvents }) => {
                       </SelectTrigger>
                       <SelectContent>
                         {eventTypes?.map((type) => (
-                          <SelectItem key={type.id} value={type.typeName}>
+                          <SelectItem key={type.id} value={type.id}>
                             {type.typeName}
                           </SelectItem>
                         ))}
