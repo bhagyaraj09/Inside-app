@@ -1,6 +1,7 @@
 "use server"
 import prisma from "../app/utils/db";
 
+
 type CreateEventInput = {
   eventType: string; // Foreign key to EventType
   eventName: string;
