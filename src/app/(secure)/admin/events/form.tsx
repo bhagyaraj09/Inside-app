@@ -27,7 +27,7 @@ interface Event {
   startTime: string;
   endTime: string | null;
   eventMode: string;
-  eventType: string;
+  eventTypeId: string;
   isEventCancelled: boolean | null;
 }
 

@@ -15,7 +15,7 @@ interface Event {
   startTime: string; // Time string in HH:MM format
   endTime: string | null; // Time string or null if not applicable
   eventMode: string; // Can be 'online' or other modes
-  eventType: string; // Name of the event type
+  eventTypeId: string; // Name of the event type
   isEventCancelled: boolean|null;
 }
 

@@ -47,7 +47,7 @@ export async function createEvent({
 
     const newEvent = await prisma.event.create({
       data: {
-        eventType: eventType,  // Many-to-one relation with EventType
+        eventTypeId : eventType,  // Many-to-one relation with EventType
         eventName: eventName,
         description: description,
         date: UTCStartDate,
@@ -123,7 +123,7 @@ catch(err){
      await prisma.event.delete({
       where: { id: eventId },
     });
-    const data=getAllEvents() 
+    const data=await getAllEvents() 
     return data
   }
 
@@ -150,19 +150,39 @@ catch(err){
     }
 
 
-export async function getAllHolidaysDate(){
+export async function getHolidayId(){
   try{
-    return await prisma.event.findMany({
-      select:{
-        date:true,
-      },
-      where: {
-        eventType: 'Holiday\n',
-        NOT: {
-          isEventCancelled: true, // Exclude events where isEventCancelled is true
-        },
+    return await prisma.eventType.findUnique({
+      where: { typeName: 'Holiday\n' },
+      select: {
+        id: true,
       },
     });
+  }
+  catch(error){console.log("Error fetching holiday id:", error);
+  }
+ }
+
+
+export async function getAllHolidaysDate(){
+
+  try{
+    const holiday=await getHolidayId() 
+    if (holiday && holiday.id){
+      return await prisma.event.findMany({
+        select:{
+          date:true,
+        },
+        where: {
+          eventTypeId: holiday.id,
+          NOT: {
+            isEventCancelled: true, // Exclude events where isEventCancelled is true
+          },
+        },
+      });
+
+    }
+    
   }
   catch(error){console.log("Error fetching events:", error);
   }
@@ -171,6 +191,10 @@ export async function getAllHolidaysDate(){
 
 export async function fetchAllHolidays() {
   try {
+    const holiday=await getHolidayId() 
+    if (holiday && holiday.id){
+
+
     const data= await prisma.event.findMany({
       select: {
         date: true,
@@ -178,13 +202,14 @@ export async function fetchAllHolidays() {
         description: true,
       },
       where: {
-        eventType: 'Holiday\n',
+        eventTypeId:holiday.id,
       
           isEventCancelled:false, // Exclude events where isEventCancelled is true
         
       },
     });
     return data
+  }
   } catch (error) {
     console.error("Error fetching events:", error);
     throw error;  // Throw the error so it can be handled by the caller

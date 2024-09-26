@@ -20,7 +20,7 @@ interface Event {
   startTime: string; // Time string in HH:MM format
   endTime: string | null; // Time string or null if not applicable
   eventMode: string; // Can be 'online' or other modes
-  eventType: string; // Name of the event type
+  eventTypeId: string; // Name of the event type
   isEventCancelled: boolean|null;
 } 
 
@@ -85,7 +85,7 @@ const EventCard: FC<EventCard> = ({
   startTime,
   endTime,
   eventMode,
-  eventType,
+  eventTypeId,
   isEventCancelled,
   handleEdit,
   handleDelete,
@@ -113,7 +113,7 @@ const EventCard: FC<EventCard> = ({
   };
 
   const handleEditForm = () => {
-    handleEdit(id, eventNameVal, descriptionVal, dateVal, startTimeVal, endTime, eventModeVal, eventType);
+    handleEdit(id, eventNameVal, descriptionVal, dateVal, startTimeVal, endTime, eventModeVal, eventTypeId);
     setEdit(false);
   };
 
