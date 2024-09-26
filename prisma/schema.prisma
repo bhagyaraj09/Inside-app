@@ -259,4 +259,5 @@ model Event {
   eventType   String
   isEventCancelled Boolean?
 
+
 }
